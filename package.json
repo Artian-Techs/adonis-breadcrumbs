@@ -1,0 +1,57 @@
+{
+  "name": "@artian-techs/adonis-breadcrumbs",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "exports": {
+    ".": "./build/index.js",
+    "./breadcrumbs_provider": "./build/providers/breadcrumbs_provider.js",
+    "./services/breadcrumbs_registry": "./build/services/breadcrumbs_registry.js",
+    "./types": "./build/src/types/main.js"
+  },
+  "scripts": {
+    "build": "npm run compile",
+    "clean": "del-cli build",
+    "compile": "npm run clean && tsc",
+    "format": "prettier --write .",
+    "lint": "eslint . --ext=.ts",
+    "precompile": "npm run lint",
+    "prepublishOnly": "npm run build",
+    "pretest": "npm run lint",
+    "quick:test": "node --enable-source-maps --loader=ts-node/esm bin/test.ts",
+    "release": "npx release-it",
+    "test": "c8 npm run quick:test",
+    "typecheck": "tsc --noEmit",
+    "version": "npm run build"
+  },
+  "devDependencies": {
+    "@adonisjs/application": "^8.2.1",
+    "@adonisjs/assembler": "^7.4.0",
+    "@adonisjs/eslint-config": "^1.3.0",
+    "@adonisjs/http-server": "^7.2.1",
+    "@adonisjs/prettier-config": "^1.3.0",
+    "@adonisjs/tsconfig": "^1.3.0",
+    "@japa/assert": "^3.0.0",
+    "@japa/plugin-adonisjs": "^3.0.1",
+    "@japa/runner": "^3.1.2",
+    "@swc/core": "^1.4.14",
+    "@types/node": "^20.12.7",
+    "@types/supertest": "^6.0.2",
+    "c8": "^9.1.0",
+    "eslint": "^8.57.0",
+    "pino-pretty": "^11.0.0",
+    "prettier": "^3.2.5",
+    "supertest": "^6.3.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "@adonisjs/core": "^6.6.0",
+    "reflect-metadata": "^0.2.2"
+  },
+  "eslintConfig": {
+    "extends": "@adonisjs/eslint-config/app"
+  },
+  "prettier": "@adonisjs/prettier-config"
+}
