@@ -11,7 +11,7 @@ test.group('BreadcrumbsRegistry', () => {
     assert.isObject(registry.routes)
   })
 
-  test('register method should add a GET route pattern and title to the routes object', async ({
+  test('register method should add a GET route pattern and title as string to the routes object', async ({
     assert,
   }) => {
     const router = new RouterFactory().create()
@@ -22,7 +22,21 @@ test.group('BreadcrumbsRegistry', () => {
     registry.register('/', 'Foo')
 
     assert.property(registry.routes, '/')
-    assert.equal(registry.routes['/'], 'Foo')
+    assert.typeOf(registry.routes['/'], 'string')
+  })
+
+  test('register method should add a GET route pattern and title as a closure to the routes object', async ({
+    assert,
+  }) => {
+    const router = new RouterFactory().create()
+    router.get('/', async () => {})
+    router.commit()
+
+    const registry = new BreadcrumbsRegistry(router)
+    registry.register('/', () => 'Foo')
+
+    assert.property(registry.routes, '/')
+    assert.typeOf(registry.routes['/'], 'function')
   })
 
   test('non-GET route should throw an error when trying to be registered', async ({ assert }) => {
