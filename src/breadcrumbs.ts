@@ -31,40 +31,48 @@ export class Breadcrumbs {
    */
   #url: string
 
-  #item: BreadcrumbItem | null = null
-
-  #visited = new Set<string>()
+  #item?: BreadcrumbItem
 
   constructor(router: HttpRouterService, registry: BreadcrumbsRegistry, ctx: HttpContext) {
     this.#router = router
     this.#registry = registry
     this.#ctx = ctx
     this.#route = ctx.route!
-    this.#url = ctx.request.url()
+    this.#url = ctx.request.url(true)
 
-    const title = this.#registry.getTitleByRoutePattern(this.#route.pattern)
-
-    if (title) {
-      const params = this.#extractParamsFromRoutePattern(this.#route.pattern)
-      const resources = params.map((param) => ctx.resources[param])
-
-      this.#item = {
-        title: typeof title === 'function' ? title(...resources) : title,
-        url: this.#url,
-      }
-
-      if (this.#hasParent(this.#route.pattern)) {
-        const parentPattern = this.#getParentPattern(this.#route.pattern)
-
-        if (parentPattern) {
-          this.#setParent(parentPattern, this.#item)
-        }
-      }
-    }
+    this.#item = this.#setItem(this.#route.pattern, this.#url)
   }
 
   get() {
     return this.#item
+  }
+
+  #setItem(pattern: string, url: string) {
+    const title = this.#registry.getTitleByRoutePattern(pattern)
+
+    if (title) {
+      const params = this.#extractParamsFromRoutePattern(pattern)
+      const resources = []
+
+      if (this.#contextHasResources()) {
+        resources.push(...params.map((param) => this.#ctx.resources[param]))
+      }
+
+      let item: BreadcrumbItem = {
+        title: typeof title === 'function' ? title(this.#ctx, ...resources) : title,
+        url,
+      }
+
+      if (this.#hasParent(pattern)) {
+        const parentPattern = this.#getParentPattern(pattern)
+
+        if (parentPattern) {
+          item.parent = this.#setItem(parentPattern, this.#getParentUrl(url))
+        }
+      }
+
+      return item
+    }
   }
 
   #hasParent(pattern: string) {
@@ -75,40 +83,8 @@ export class Breadcrumbs {
     }
   }
 
-  #setParent(pattern: string, currentItem: Partial<BreadcrumbItem>) {
-    if (this.#visited.has(pattern)) {
-      return // Already visited this pattern, terminate recursion
-    }
-
-    this.#visited.add(pattern)
-
-    const title = this.#registry.getTitleByRoutePattern(pattern)
-
-    if (title) {
-      const params = this.#extractParamsFromRoutePattern(this.#route.pattern)
-      const resources = params.map((param) => this.#ctx.resources[param])
-
-      const url = currentItem.url!.split('/').slice(0, -1).join('/')
-
-      const item = {
-        title: typeof title === 'function' ? title(...resources) : title,
-        url: url.length < 1 ? '/' : url,
-      }
-
-      currentItem.parent = item
-
-      if (this.#hasParent(pattern)) {
-        const parentPattern = this.#getParentPattern(pattern)
-
-        if (parentPattern) {
-          this.#setParent(parentPattern, item)
-        }
-      }
-    }
-  }
-
   #getParentPattern(pattern: string) {
-    if (pattern.length < 1) {
+    if (pattern.length <= 1) {
       return
     }
 
@@ -125,6 +101,30 @@ export class Breadcrumbs {
     }
 
     return params.map((param) => param.slice(1))
+  }
+
+  #contextHasResources() {
+    return 'resources' in this.#ctx
+  }
+
+  /**
+   * Extract the parent URL from the current URL.
+   * Should also handle the case where the URL is the root URL (i.e "/").
+   */
+  #getParentUrl(url: string) {
+    const fragments = url.split('/').filter((fragment) => fragment !== '')
+
+    let parentUrl = ''
+
+    for (let i = 0; i < fragments.length - 1; i++) {
+      parentUrl += `/${fragments[i]}`
+    }
+
+    if (parentUrl === '') {
+      return '/'
+    }
+
+    return parentUrl
   }
 
   #makeUrl(url: string) {}

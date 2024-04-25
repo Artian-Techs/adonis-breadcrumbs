@@ -1,6 +1,7 @@
-import { HttpRouterService } from '@adonisjs/core/types'
+import type { RouteJSON } from '@adonisjs/http-server/types'
+import type { HttpRouterService } from '@adonisjs/core/types'
+
 import { BreadcrumbTrail } from './breadcrumb_trail.js'
-import { RouteJSON } from '@adonisjs/http-server/types'
 
 export class BreadcrumbsRegistry {
   #router: HttpRouterService
