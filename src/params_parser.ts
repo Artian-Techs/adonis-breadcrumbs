@@ -18,7 +18,7 @@ export class ParamsParser {
    * >comment(slug)
    */
   #parseParam(param: string) {
-    let [name, _] = param.split('(')
+    let [name] = param.split('(')
 
     if (name.startsWith('>')) {
       name = name.substring(1)
