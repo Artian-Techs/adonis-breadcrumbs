@@ -1,7 +1,14 @@
 import type { ApplicationService } from '@adonisjs/core/types'
+import type { Breadcrumbs } from '../src/breadcrumbs.js'
 
 import { BreadcrumbsRegistry } from '../src/breadcrumbs_registry.js'
-import { BreadcrumbsMiddleware } from '../src/middleware/breadcrumbs_middleware.js'
+import { BreadcrumbsMiddleware } from '../src/breadcrumbs_middleware.js'
+
+declare module '@adonisjs/core/http' {
+  interface HttpContext {
+    breadcrumbs: InstanceType<typeof Breadcrumbs>
+  }
+}
 
 export default class BreadcrumbsProvider {
   constructor(protected app: ApplicationService) {}
