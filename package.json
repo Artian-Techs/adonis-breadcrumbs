@@ -7,7 +7,8 @@
   "exports": {
     ".": "./build/index.js",
     "./breadcrumbs_provider": "./build/providers/breadcrumbs_provider.js",
-    "./services/breadcrumbs_registry": "./build/services/breadcrumbs_registry.js",
+    "./breadcrumbs_middleware": "./build/src/breadcrumbs_middleware.js",
+    "./services/breadcrumbs": "./build/services/breadcrumbs_registry.js",
     "./types": "./build/src/types/main.js"
   },
   "scripts": {

@@ -6,7 +6,7 @@ import supertest from 'supertest'
 import { test } from '@japa/runner'
 import { ServerFactory } from '@adonisjs/http-server/factories'
 
-import { BreadcrumbsMiddleware } from '../src/middleware/breadcrumbs_middleware.js'
+import { BreadcrumbsMiddleware } from '../src/breadcrumbs_middleware.js'
 import { setupApp } from '../test_helpers/index.js'
 
 test.group('Breadcrumbs', () => {

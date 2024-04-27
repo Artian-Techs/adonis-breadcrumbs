@@ -3,8 +3,8 @@ import type { HttpRouterService } from '@adonisjs/core/types'
 
 import { HttpContext } from '@adonisjs/core/http'
 
-import { Breadcrumbs } from '../breadcrumbs.js'
-import { BreadcrumbsRegistry } from '../breadcrumbs_registry.js'
+import { Breadcrumbs } from './breadcrumbs.js'
+import { BreadcrumbsRegistry } from './breadcrumbs_registry.js'
 
 export class BreadcrumbsMiddleware {
   constructor(

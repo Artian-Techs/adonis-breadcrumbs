@@ -8,7 +8,7 @@ import { HttpContext } from '@adonisjs/core/http'
 import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
 import { migrate, rollback, setupApp } from '../test_helpers/index.js'
 import RouteModelBindingMiddleware from '@adonisjs/route-model-binding/rmb_middleware'
-import { BreadcrumbsMiddleware } from '../src/middleware/breadcrumbs_middleware.js'
+import { BreadcrumbsMiddleware } from '../src/breadcrumbs_middleware.js'
 import { bind } from '@adonisjs/route-model-binding'
 
 test.group('Breadcrumbs - Route Model Binding', () => {
