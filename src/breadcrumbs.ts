@@ -4,6 +4,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 
 import { BreadcrumbsRegistry } from './breadcrumbs_registry.js'
 import { BreadcrumbItem } from './types/main.js'
+import { ParamsParser } from './params_parser.js'
 
 export class Breadcrumbs {
   /**
@@ -51,11 +52,12 @@ export class Breadcrumbs {
     const title = this.#registry.getTitleByRoutePattern(pattern)
 
     if (title) {
-      const params = this.#extractParamsFromRoutePattern(pattern)
+      const params = this.#router.match(this.#url, this.#ctx.request.method())!.route.meta.params
+      const resolvedParams = new ParamsParser(params).parse()
       const resources = []
 
       if (this.#contextHasResources()) {
-        resources.push(...params.map((param) => this.#ctx.resources[param]))
+        resources.push(...resolvedParams.map((param) => this.#ctx.resources[param]))
       }
 
       let item: BreadcrumbItem = {
@@ -91,16 +93,6 @@ export class Breadcrumbs {
     const parentPattern = pattern.split('/').slice(0, -1).join('/')
 
     return parentPattern.length === 0 ? '/' : parentPattern
-  }
-
-  #extractParamsFromRoutePattern(pattern: string) {
-    const params = pattern.match(/:([a-zA-Z0-9_]+)/g)
-
-    if (!params) {
-      return []
-    }
-
-    return params.map((param) => param.slice(1))
   }
 
   #contextHasResources() {
