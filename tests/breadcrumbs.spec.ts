@@ -16,7 +16,7 @@ test.group('Breadcrumbs', () => {
 
     const httpContext = new HttpContextFactory().create()
     httpContext.route = router.findOrFail('/')
-    httpContext.request = new RequestFactory().merge({ url: '/' }).create()
+    httpContext.request = new RequestFactory().merge({ url: '/', method: 'GET' }).create()
 
     const breadcrumbs = new Breadcrumbs(router, registry, httpContext)
 
@@ -35,7 +35,7 @@ test.group('Breadcrumbs', () => {
 
     const httpContext = new HttpContextFactory().create()
     httpContext.route = router.findOrFail('/')
-    httpContext.request = new RequestFactory().merge({ url: '/' }).create()
+    httpContext.request = new RequestFactory().merge({ url: '/', method: 'GET' }).create()
 
     const breadcrumbs = new Breadcrumbs(router, registry, httpContext)
     const breadcrumbItem = breadcrumbs.get()
@@ -60,7 +60,7 @@ test.group('Breadcrumbs', () => {
 
     const httpContext = new HttpContextFactory().create()
     httpContext.route = router.findOrFail('/foo/:foo')
-    httpContext.request = new RequestFactory().merge({ url: '/foo/1' }).create()
+    httpContext.request = new RequestFactory().merge({ url: '/foo/1', method: 'GET' }).create()
 
     const breadcrumbs = new Breadcrumbs(router, registry, httpContext)
     const breadcrumbItem = breadcrumbs.get()
@@ -88,7 +88,7 @@ test.group('Breadcrumbs', () => {
 
     const httpContext = new HttpContextFactory().create()
     httpContext.route = router.findOrFail('/foo/:foo/bar')
-    httpContext.request = new RequestFactory().merge({ url: '/foo/1/bar' }).create()
+    httpContext.request = new RequestFactory().merge({ url: '/foo/1/bar', method: 'GET' }).create()
 
     const breadcrumbs = new Breadcrumbs(router, registry, httpContext)
     const breadcrumbItem = breadcrumbs.get()
@@ -120,7 +120,7 @@ test.group('Breadcrumbs', () => {
 
     const httpContext = new HttpContextFactory().create()
     httpContext.route = router.findOrFail('/')
-    httpContext.request = new RequestFactory().merge({ url: '/' }).create()
+    httpContext.request = new RequestFactory().merge({ url: '/', method: 'GET' }).create()
 
     const breadcrumbs = new Breadcrumbs(router, registry, httpContext)
     const breadcrumbItem = breadcrumbs.get()
@@ -140,7 +140,7 @@ test.group('Breadcrumbs', () => {
 
     const httpContext = new HttpContextFactory().create()
     httpContext.route = router.findOrFail('/')
-    httpContext.request = new RequestFactory().merge({ url: '/' }).create()
+    httpContext.request = new RequestFactory().merge({ url: '/', method: 'GET' }).create()
 
     const breadcrumbs = new Breadcrumbs(router, registry, httpContext)
     const breadcrumbItem = breadcrumbs.get()
@@ -164,7 +164,7 @@ test.group('Breadcrumbs', () => {
 
     const httpContext = new HttpContextFactory().create()
     httpContext.route = router.findOrFail('/')
-    httpContext.request = new RequestFactory().merge({ url: '/' }).create()
+    httpContext.request = new RequestFactory().merge({ url: '/', method: 'GET' }).create()
 
     new Breadcrumbs(router, registry, httpContext)
   })

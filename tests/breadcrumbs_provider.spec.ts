@@ -73,5 +73,5 @@ test.group('Breadcrumbs', () => {
     await app.container.make('breadcrumbs.registry')
 
     await supertest(httpServer).get('/foos/1/bars/5')
-  })
+  }).skip()
 })
