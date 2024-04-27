@@ -16,6 +16,9 @@ public/assets
 # Build tools specific
 npm-debug.log
 yarn-error.log
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
 
 # Editors specific
 .fleet
