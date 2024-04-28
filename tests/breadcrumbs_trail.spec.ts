@@ -12,7 +12,7 @@ import { BreadcrumbsMiddleware } from '../src/breadcrumbs_middleware.js'
 import { BreadcrumbsTrail } from '../src/breadcrumbs_trail.js'
 
 test.group('BreadcrumbsTrail', () => {
-  test('for method', async ({ assert }) => {
+  test('for method should register named routes', async ({ assert }) => {
     const router = new RouterFactory().create()
     router.get('/', async () => {}).as('home')
     router.get('/foo', async () => {}).as('foo')
