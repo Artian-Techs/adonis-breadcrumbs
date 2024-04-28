@@ -35,7 +35,7 @@ export class BreadcrumbsRegistry {
   }
 
   /**
-   * `route` param can be the route pattern or route name.
+   * Register a named route from outside the router
    */
   for(routeName: string, cb: (ctx: HttpContext, trail: BreadcrumbsTrail, ...args: any[]) => void) {
     const route = this.#router.findOrFail(routeName)
