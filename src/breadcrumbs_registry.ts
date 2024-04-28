@@ -22,10 +22,6 @@ export class BreadcrumbsRegistry {
     return this.#routes
   }
 
-  get(routeName: string) {
-    return this.#namedRoutes[routeName]
-  }
-
   getNamedRouteCallback(routeName: string) {
     return this.#namedRoutes[routeName]
   }
