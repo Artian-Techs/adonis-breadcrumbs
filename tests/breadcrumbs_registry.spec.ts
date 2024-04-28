@@ -15,11 +15,11 @@ test.group('BreadcrumbsRegistry', () => {
     assert,
   }) => {
     const router = new RouterFactory().create()
-    router.get('/', async () => {})
+    const route = router.get('/', async () => {})
     router.commit()
 
     const registry = new BreadcrumbsRegistry(router)
-    registry.register('/', 'Foo')
+    registry.register(route, 'Foo')
 
     assert.property(registry.routes, '/')
     assert.typeOf(registry.routes['/'], 'string')
@@ -29,11 +29,11 @@ test.group('BreadcrumbsRegistry', () => {
     assert,
   }) => {
     const router = new RouterFactory().create()
-    router.get('/', async () => {})
+    const route = router.get('/', async () => {})
     router.commit()
 
     const registry = new BreadcrumbsRegistry(router)
-    registry.register('/', () => 'Foo')
+    registry.register(route, () => 'Foo')
 
     assert.property(registry.routes, '/')
     assert.typeOf(registry.routes['/'], 'function')
@@ -41,21 +41,21 @@ test.group('BreadcrumbsRegistry', () => {
 
   test('non-GET route should throw an error when trying to be registered', async ({ assert }) => {
     const router = new RouterFactory().create()
-    router.post('/foo', async () => {})
+    const route = router.post('/foo', async () => {})
     router.commit()
 
     const registry = new BreadcrumbsRegistry(router)
 
-    assert.throws(() => registry.register('/foo', 'Foo'), 'Route /foo must be a GET route')
+    assert.throws(() => registry.register(route, 'Foo'), 'Route /foo must be a GET route')
   })
 
   test('has method should return true if route exists in the routes object', async ({ assert }) => {
     const router = new RouterFactory().create()
-    router.get('/foo', async () => {})
+    const route = router.get('/foo', async () => {})
     router.commit()
 
     const registry = new BreadcrumbsRegistry(router)
-    registry.register('/foo', 'Foo')
+    registry.register(route, 'Foo')
 
     assert.isTrue(registry.has('/foo'))
   })
@@ -74,11 +74,11 @@ test.group('BreadcrumbsRegistry', () => {
 
   test('getTitleByRoutePattern method should return a route by its pattern', async ({ assert }) => {
     const router = new RouterFactory().create()
-    router.get('/foo', async () => {})
+    const route = router.get('/foo', async () => {})
     router.commit()
 
     const registry = new BreadcrumbsRegistry(router)
-    registry.register('/foo', 'Foo')
+    registry.register(route, 'Foo')
 
     assert.equal(registry.getTitleByRoutePattern('/foo'), 'Foo')
   })

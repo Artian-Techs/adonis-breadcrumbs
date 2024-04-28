@@ -64,7 +64,7 @@ export async function migrate(database: Database) {
   await database.connection().schema.createTable('comments', (table) => {
     table.increments('id')
     table.integer('post_id').notNullable().unsigned().references('id').inTable('posts')
-    table.string('title').notNullable()
+    table.string('body').notNullable()
     table.string('slug').notNullable()
   })
 }

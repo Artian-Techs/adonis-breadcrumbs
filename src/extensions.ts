@@ -1,9 +1,21 @@
-import { Route } from '@adonisjs/core/http'
+import type { Title } from './types/main.js'
+
+import { Route, RouteResource } from '@adonisjs/core/http'
 import { BreadcrumbsRegistry } from './breadcrumbs_registry.js'
 
 export function addRoutePlugin(registry: BreadcrumbsRegistry) {
-  Route.macro('title', function (this: Route, title: string | ((...args: any[]) => string)) {
-    registry.register(this.getPattern(), title)
+  Route.macro('title', function (this: Route, title: Title) {
+    registry.register(this, title)
+
+    return this
+  })
+
+  RouteResource.macro('titles', function (this: RouteResource, titles: Record<string, Title>) {
+    const routes = this.routes.filter((route) => route.toJSON().methods.includes('GET'))
+
+    for (const route of routes) {
+      registry.register(route, titles[route.getName()!.split('.').pop()!])
+    }
 
     return this
   })

@@ -13,6 +13,7 @@ export class ParamsParser {
    * A param can be one of the following
    *
    * post
+   * post?
    * post(slug)
    * >comment
    * >comment(slug)

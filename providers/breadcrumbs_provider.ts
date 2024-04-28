@@ -1,10 +1,19 @@
 import type { ApplicationService } from '@adonisjs/core/types'
+import type { RouteTitle, Title } from '../src/types/main.js'
 import type { Breadcrumbs } from '../src/breadcrumbs.js'
 
 import { BreadcrumbsRegistry } from '../src/breadcrumbs_registry.js'
 import { BreadcrumbsMiddleware } from '../src/breadcrumbs_middleware.js'
 
 declare module '@adonisjs/core/http' {
+  export interface Route {
+    title: RouteTitle<this>
+  }
+
+  export interface RouteResource {
+    titles: (titles: Record<string, Title>) => this
+    title: RouteTitle<this>
+  }
   interface HttpContext {
     breadcrumbs: InstanceType<typeof Breadcrumbs>
   }

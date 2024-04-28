@@ -1,14 +1,18 @@
-import type { RouteJSON } from '@adonisjs/http-server/types'
 import type { HttpRouterService } from '@adonisjs/core/types'
 
-import { BreadcrumbTrail } from './breadcrumb_trail.js'
+import { BreadcrumbsTrail } from './breadcrumbs_trail.js'
+import { HttpContext, Route } from '@adonisjs/http-server'
+import { RouteJSON } from '@adonisjs/http-server/types'
 
 export class BreadcrumbsRegistry {
   #router: HttpRouterService
 
   #routes: Record<string, string | ((...args: any[]) => string)> = {}
 
-  #namedRoutes: Record<string, (trail: BreadcrumbTrail, ...args: any[]) => void> = {}
+  #namedRoutes: Record<
+    string,
+    (ctx: HttpContext, trail: BreadcrumbsTrail, ...args: any[]) => void
+  > = {}
 
   constructor(router: HttpRouterService) {
     this.#router = router
@@ -18,6 +22,14 @@ export class BreadcrumbsRegistry {
     return this.#routes
   }
 
+  get(routeName: string) {
+    return this.#namedRoutes[routeName]
+  }
+
+  getNamedRouteCallback(routeName: string) {
+    return this.#namedRoutes[routeName]
+  }
+
   has(pattern: string) {
     return !!this.#routes[pattern]
   }
@@ -25,7 +37,7 @@ export class BreadcrumbsRegistry {
   /**
    * `route` param can be the route pattern or route name.
    */
-  for(routeName: string, cb: (trail: BreadcrumbTrail, ...args: any[]) => void) {
+  for(routeName: string, cb: (ctx: HttpContext, trail: BreadcrumbsTrail, ...args: any[]) => void) {
     const route = this.#router.findOrFail(routeName)
 
     this.#ensureIsGetRoute(route)
@@ -40,10 +52,10 @@ export class BreadcrumbsRegistry {
   /**
    * Register a new pair of route and title/callback
    */
-  register(pattern: string, title: string | ((...args: any[]) => string)) {
-    const route = this.#router.findOrFail(pattern)
+  register(route: Route, title: string | ((...args: any[]) => string)) {
+    this.#ensureIsGetRoute(route.toJSON())
 
-    this.#ensureIsGetRoute(route)
+    const pattern = route.getPattern()
 
     if (!this.#routes[pattern]) {
       this.#routes[pattern] = title
@@ -53,6 +65,10 @@ export class BreadcrumbsRegistry {
   }
 
   getTitleByRoutePattern(pattern: string) {
+    if (!pattern.startsWith('/')) {
+      pattern = `/${pattern}`
+    }
+
     return this.#routes[pattern]
   }
 
