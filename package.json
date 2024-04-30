@@ -24,7 +24,10 @@
     "release": "npx release-it",
     "test": "c8 npm run quick:test",
     "typecheck": "tsc --noEmit",
-    "version": "npm run build"
+    "version": "npm run build",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "devDependencies": {
     "@adonisjs/application": "^8.2.2",
@@ -51,7 +54,8 @@
     "sqlite3": "^5.1.7",
     "supertest": "^6.3.4",
     "ts-node": "^10.9.2",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vitepress": "^1.1.4"
   },
   "dependencies": {
     "@adonisjs/core": "^6.8.0"

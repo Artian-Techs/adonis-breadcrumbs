@@ -27,3 +27,6 @@ package-lock.json
 
 # Platform specific
 .DS_Store
+
+docs/.vitepress/dist
+docs/.vitepress/cache
