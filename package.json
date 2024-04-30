@@ -8,7 +8,7 @@
     ".": "./build/index.js",
     "./breadcrumbs_provider": "./build/providers/breadcrumbs_provider.js",
     "./breadcrumbs_middleware": "./build/src/breadcrumbs_middleware.js",
-    "./services/breadcrumbs": "./build/services/breadcrumbs_registry.js",
+    "./services/registry": "./build/services/breadcrumbs_registry.js",
     "./types": "./build/src/types.js"
   },
   "scripts": {

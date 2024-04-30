@@ -25,7 +25,7 @@ router.get('/admin/dashboard', () => {}).name('admin.dashboard')
 // start/breadcrumbs.ts
 
 import { HttpContext } from '@adonisjs/core/http'
-import Breadcrumbs from '@artian-techs/adonis-breadcrumbs'
+import Breadcrumbs from '@artian-techs/adonis-breadcrumbs/services/registry'
 
 Breadcrumbs.for('home', (trail, { request }: HttpContext) => {
   trail.push('Home', request.url())
