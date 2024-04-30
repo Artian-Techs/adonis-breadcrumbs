@@ -1,6 +1,6 @@
 import type { HttpContext } from '@adonisjs/http-server'
 import type { BreadcrumbsRegistry } from './breadcrumbs_registry.js'
-import type { BreadcrumbItem } from './types/main.js'
+import type { BreadcrumbItem } from './types.js'
 
 export class BreadcrumbsTrail {
   #registry: BreadcrumbsRegistry

@@ -1,4 +1,4 @@
-import type { Title } from './types/main.js'
+import type { Title } from './types.js'
 
 import { Route, RouteResource } from '@adonisjs/core/http'
 import { BreadcrumbsRegistry } from './breadcrumbs_registry.js'

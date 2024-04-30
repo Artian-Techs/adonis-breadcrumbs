@@ -9,7 +9,7 @@
     "./breadcrumbs_provider": "./build/providers/breadcrumbs_provider.js",
     "./breadcrumbs_middleware": "./build/src/breadcrumbs_middleware.js",
     "./services/breadcrumbs": "./build/services/breadcrumbs_registry.js",
-    "./types": "./build/src/types/main.js"
+    "./types": "./build/src/types.js"
   },
   "scripts": {
     "build": "npm run compile",
@@ -32,6 +32,7 @@
   "devDependencies": {
     "@adonisjs/application": "^8.2.2",
     "@adonisjs/assembler": "^7.4.0",
+    "@adonisjs/core": "^6.9.0",
     "@adonisjs/eslint-config": "^1.3.0",
     "@adonisjs/http-server": "^7.2.2",
     "@adonisjs/inertia": "1.0.0-26",
@@ -57,8 +58,9 @@
     "typescript": "^5.4.5",
     "vitepress": "^1.1.4"
   },
-  "dependencies": {
-    "@adonisjs/core": "^6.8.0"
+  "peerDependencies": {
+    "@adonisjs/core": "^6.9.0",
+    "@adonisjs/lucid": "^20.5.1"
   },
   "eslintConfig": {
     "extends": "@adonisjs/eslint-config/app"

@@ -1,9 +1,15 @@
 import type { ApplicationService } from '@adonisjs/core/types'
-import type { RouteTitle, Title } from '../src/types/main.js'
+import type { RouteTitle, Title } from '../src/types.js'
 import type { Breadcrumbs } from '../src/breadcrumbs.js'
 
 import { BreadcrumbsRegistry } from '../src/breadcrumbs_registry.js'
 import { BreadcrumbsMiddleware } from '../src/breadcrumbs_middleware.js'
+
+declare module '@adonisjs/core/types' {
+  export interface ContainerBindings {
+    'breadcrumbs.registry': BreadcrumbsRegistry
+  }
+}
 
 declare module '@adonisjs/core/http' {
   export interface Route {
