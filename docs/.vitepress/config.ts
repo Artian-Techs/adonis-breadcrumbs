@@ -41,6 +41,8 @@ const guidesNav = [
 export default defineConfig({
   title: 'Adonis Breadcrumbs',
   description: 'Add breadcrumbs to AdonisJS routes only by defining titles',
+  lastUpdated: true,
+  lang: 'en-US',
 
   head: [
     ['meta', { property: 'og:title', content: 'Adonis Breadcrumbs' }],
@@ -51,7 +53,10 @@ export default defineConfig({
   ],
 
   themeConfig: {
-    // https://vitepress.dev/reference/default-theme-config
+    editLink: {
+      pattern: 'https://github.com/@artian-techs/adonis-breadcrumbs/edit/main/docs/:path',
+      text: 'Edit this page on GitHub',
+    },
     nav: [{ text: 'Home', link: '/' }],
 
     sidebar: {
