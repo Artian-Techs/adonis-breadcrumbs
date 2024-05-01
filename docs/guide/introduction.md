@@ -6,7 +6,7 @@ Titles can also be defined for (**_only_**) named routes, in a separate file tha
 
 # Example
 
-1 - Install and configure the package by following the [installation instructions](./instructions).
+1 - Install and configure the package by following the [installation instructions](./installation).
 
 2 - Define routes and titles.
 
