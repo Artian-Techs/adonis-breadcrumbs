@@ -37,7 +37,7 @@ Breadcrumbs.for('admin.dashboard', (trail, ctx: HttpContext) => {
 })
 ```
 
-In the example above, we have defined two titles for our two routes. The `Breadcrumbs.for` method accepts a route name as argument and if the route is not found, an exception will be thrown. The second argument is a callback that accepts a `BreadcrumbsTrail` as first argument, the HTTP context as second argument and the remaining arguments are the models if route binding model is used. The `trail.push` method adds a new pair of title and URL (it is important, it is not the route pattern but the URL for that route). The `trail.parent` method adds a breadcrumb parent to the current breadcrumb item.
+In the example above, we have defined two titles for our two routes. The `Breadcrumbs.for` method accepts a route name as argument and if the route is not found, an exception will be thrown. The second argument is a callback that accepts an instance of `BreadcrumbsTrail` as first argument, the HTTP context as second argument, and the remaining arguments are the models if route binding model is used. The `trail.push` method adds a new pair of title and URL (it is important, it is not the route pattern but the URL for that route). The `trail.parent` method adds a breadcrumb parent to the current breadcrumb item.
 
 ## Get breadcrumbs
 
