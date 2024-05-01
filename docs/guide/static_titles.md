@@ -1,6 +1,6 @@
 # Static titles
 
-Defining titles is easy. All you have to do, is to use the `title` method when you define `GET` routes. Routes are registered in a breadcrumbs registry using their pattern. I `title` method is used with a non-`GET` route, an exception will be thrown.
+Defining titles is easy. This module adds a `title` method on the `Route` instance and should only be used with `GET` routes, otherwise, an exception will be thrown. Routes are registered in a breadcrumbs registry using their pattern.
 
 ## Define titles
 
