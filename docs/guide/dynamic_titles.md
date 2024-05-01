@@ -1,3 +1,5 @@
+# Dynamic titles
+
 If your routes use route model binding, dynamic titles are an excellent choice, as it will abstract a lot of logic for you.
 
 ## Define dynamic titles

@@ -1,3 +1,5 @@
+# Standalone file
+
 If you worry about clean routes files, you can define the titles in a separate file.
 
 ## Create a new file

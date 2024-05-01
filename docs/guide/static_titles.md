@@ -1,3 +1,5 @@
+# Static titles
+
 Defining titles is easy. All you have to do, is to use the `title` method when you define `GET` routes. Routes are registered in a breadcrumbs registry using their pattern. I `title` method is used with a non-`GET` route, an exception will be thrown.
 
 ## Define titles
