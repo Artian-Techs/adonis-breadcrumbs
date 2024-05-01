@@ -55,24 +55,22 @@ export default class AdminDashboardController {
 }
 ```
 
-The `https://your-site.com/admin/dashboard` url should return an object containing the breadcrumbs of the current route.
+The `https://your-site.com/admin/dashboard` url should return an ordered array containing the breadcrumbs of the current route.
 
 ```json
-{
-  "url": "https://your-site.com/admin/dashboard",
-  "title": "Admin dashboard",
-  "name": "admin.dashboard",
-  "parent": {
-    "url": "/",
-    "title": "Home",
-    "name": "home"
+[
+  { "url": "/", "title": "Home", "name": "home" },
+  {
+    "url": "https://your-site.com/admin/dashboard",
+    "title": "Admin dashboard",
+    "name": "admin.dashboard"
   }
-}
+]
 ```
 
 ## Resource routes
 
-If you wish to define titles in a separate file for resource routes, you will need to write the full route name as keys (i.e with all prefixes).
+Titles for resource routes can also be defined in a separate file. However, the full route names (i.e with all prefixes), must be as keys.
 
 ```typescript
 // start/routes.ts

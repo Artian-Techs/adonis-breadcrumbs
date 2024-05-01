@@ -33,7 +33,7 @@ export default class AdminDashboardController {
 }
 ```
 
-In this example, the `https://your-site.com/admin/dashboard` URL should return an object containing the breadcrumbs of the `/admin/dashboard` route.
+In this example, the `https://your-site.com/admin/dashboard` URL should return an ordered array containing the breadcrumbs of the `/admin/dashboard` route.
 
 ```json
 {

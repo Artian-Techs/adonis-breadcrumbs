@@ -26,7 +26,7 @@ The params and models are connected using the order they appear and not the name
 
 ## Get breadcrumbs
 
-To get breadcrumbs for the current route, you need to access `breadcrumbs` property from the HTTP context.
+To generate breadcrumbs for the current route, you must access the `breadcrumbs` property within the HTTP context and call the `get` method.
 
 ```typescript
 import { HttpContext } from '@adonisjs/core/http'
@@ -42,27 +42,17 @@ export default class UsersController {
 }
 ```
 
-The `https://your-site.com/admin/dashboard/users/5` url should return an object containing the breadcrumbs of the current route.
+The `https://your-site.com/admin/dashboard/users/5` url should return an ordered array containing the breadcrumbs of the current route.
 
 ```json
-{
-  "url": "/admin/dashboard/users/5",
-  "title": "...", // Dynamic title: User fullname from database
-  "name": undefined,
-  "parent": {
-    "url": "/admin/dashboard/users",
-    "title": "Users",
-    "name": undefined,
-    "parent": {
-      "url": "/admin/dashboard",
-      "title": "Admin dashboard",
-      "name": undefined,
-      "parent": {
-        "url": "/",
-        "title": "Home",
-        "name": undefined
-      }
-    }
+[
+  { "url": "/", "title": "Home", "name": undefined },
+  { "url": "/admin/dashboard", "title": "Admin dashboard", "name": undefined },
+  { "url": "/admin/dashboard/users", "title": "Users", "name": undefined },
+  {
+    "url": "/admin/dashboard/users/5",
+    "title": "...", // Dynamic title: User fullname from database
+    "name": undefined
   }
-}
+]
 ```
