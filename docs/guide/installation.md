@@ -80,5 +80,5 @@ router.use([() => import('@artian-techs/adonis-breadcrumbs/breadcrumbs_middlewar
 </details>
 
 ::: tip
-Once the middleware is registered, and Edge or Inertia is registered as well, views/templates will have access to the same breadcrumbs instance as the one in the HTTP context.
+Once the middleware and either Edge or Inertia are registered, views/templates will have access to the same breadcrumbs instance as in the HTTP context.
 :::

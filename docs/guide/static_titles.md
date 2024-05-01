@@ -1,6 +1,6 @@
 # Static titles
 
-Defining titles is easy. This module adds a `title` method on the `Route` instance and should only be used with `GET` routes, otherwise, an exception will be thrown. Routes are registered in a breadcrumbs registry using their pattern.
+Defining titles is easy. This module adds a `title` method on the `Route` instance and should only be used with `GET` routes, otherwise, an exception is raised. Routes are registered in a breadcrumbs registry using their pattern.
 
 ## Define titles
 
@@ -21,7 +21,7 @@ Please, be aware that if a route and its parent/ancestors route(s) are using a c
 
 ## Get breadcrumbs
 
-To get breadcrumbs for the current route, you need to access `breadcrumbs` property from the HTTP context.
+To generate breadcrumbs for the current route, you must access the `breadcrumbs` property within the HTTP context and call the `get` method.
 
 ```typescript{5}
 import { HttpContext } from '@adonisjs/core/http'
@@ -33,7 +33,7 @@ export default class AdminDashboardController {
 }
 ```
 
-The `https://your-site.com/admin/dashboard` url should return an object containing the breadcrumbs of the current route.
+In this example, the `https://your-site.com/admin/dashboard` URL should return an object containing the breadcrumbs of the `/admin/dashboard` route.
 
 ```json
 {
