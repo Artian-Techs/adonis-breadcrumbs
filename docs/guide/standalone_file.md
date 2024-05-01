@@ -59,11 +59,11 @@ The `https://your-site.com/admin/dashboard` url should return an object containi
 {
   "url": "https://your-site.com/admin/dashboard",
   "title": "Admin dashboard",
-  "name": undefined,
+  "name": "admin.dashboard",
   "parent": {
     "url": "/",
     "title": "Home",
-    "name": undefined
+    "name": "home"
   }
 }
 ```
