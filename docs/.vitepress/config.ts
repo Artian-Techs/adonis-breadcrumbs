@@ -54,7 +54,7 @@ export default defineConfig({
 
   themeConfig: {
     editLink: {
-      pattern: 'https://github.com/@artian-techs/adonis-breadcrumbs/edit/main/docs/:path',
+      pattern: 'https://github.com/Artian-Techs/adonis-breadcrumbs/edit/main/docs/:path',
       text: 'Edit this page on GitHub',
     },
     nav: [{ text: 'Home', link: '/' }],
