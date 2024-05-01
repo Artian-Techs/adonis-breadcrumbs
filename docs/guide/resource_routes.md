@@ -8,9 +8,9 @@ In this example, we are using dynamic titles from `@adonisjs/i18n` module and ro
 import { HttpContext } from '@adonisjs/core/http'
 import router from '@adonisjs/core/services/router'
 
-const UsersController = () => import('#controllers/users_controller')
+const PostsController = () => import('#controllers/posts_controller')
 
-router.resource('posts', UsersController).titles({
+router.resource('posts', PostsController).titles({
   index: 'All posts', // Simple string
   create: ({ i18n }: HttpContext) => i18n.t('post.create'), // From lang files
   show: (ctx: HttpContext, post: Post) => post.title, // From route model binding

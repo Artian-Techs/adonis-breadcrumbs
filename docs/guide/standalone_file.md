@@ -69,3 +69,43 @@ The `https://your-site.com/admin/dashboard` url should return an object containi
   }
 }
 ```
+
+## Resource routes
+
+If you wish to define titles in a separate file for resource routes, you will need to write the full route name as keys (i.e with all prefixes).
+
+```typescript
+// start/routes.ts
+
+import { HttpContext } from '@adonisjs/core/http'
+import router from '@adonisjs/core/services/router'
+
+const PostsController = () => import('#controllers/posts_controller')
+
+router.resource('posts', PostsController)
+```
+
+```typescript
+// start/breadcrumbs.ts
+
+import Breadcrumbs from '@artian-techs/adonis-breadcrumbs/services/registry'
+
+Breadcrumbs.for('posts.index', (trail, ctx) => {
+  trail.push('All posts', ctx.request.url())
+})
+
+Breadcrumbs.for('posts.create', (trail, ctx) => {
+  trail.parent('posts.index')
+  trail.push(ctx.i18n.t('posts.create'), ctx.request.url())
+})
+
+Breadcrumbs.for('posts.show', (trail, ctx, post: Post) => {
+  trail.parent('posts.index')
+  trail.push(post.title, ctx.request.url())
+})
+
+Breadcrumbs.for('posts.edit', (trail, ctx, post: Post) => {
+  trail.parent('posts.show')
+  trail.push('Edit', ctx.request.url())
+})
+```
