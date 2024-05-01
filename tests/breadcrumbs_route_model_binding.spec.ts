@@ -75,7 +75,9 @@ test.group('Breadcrumbs - Route Model Binding', () => {
 
     await new RouteModelBindingMiddleware(app).handle(ctx, async () => {})
     await new BreadcrumbsMiddleware(router, registry).handle(ctx, async () => {
-      assert.containsSubset(ctx.breadcrumbs.get(), { title: 'Post 1', url: '/posts/1' })
+      assert.deepEqual(ctx.breadcrumbs.get(), [
+        { title: 'Post 1', url: '/posts/1', name: undefined },
+      ])
     })
 
     await rollback(db)
@@ -149,10 +151,13 @@ test.group('Breadcrumbs - Route Model Binding', () => {
 
     await new RouteModelBindingMiddleware(app).handle(ctx, async () => {})
     await new BreadcrumbsMiddleware(router, registry).handle(ctx, async () => {
-      assert.containsSubset(ctx.breadcrumbs.get(), {
-        title: 'Post 1 - Comment 1',
-        url: '/posts/1/comments/1',
-      })
+      assert.deepEqual(ctx.breadcrumbs.get(), [
+        {
+          title: 'Post 1 - Comment 1',
+          url: '/posts/1/comments/1',
+          name: undefined,
+        },
+      ])
     })
 
     await rollback(db)
@@ -221,7 +226,9 @@ test.group('Breadcrumbs - Route Model Binding', () => {
 
     await new RouteModelBindingMiddleware(app).handle(ctx, async () => {})
     await new BreadcrumbsMiddleware(router, registry).handle(ctx, async () => {
-      assert.containsSubset(ctx.breadcrumbs.get(), { title: 'Post 1', url: '/posts/post-1' })
+      assert.deepEqual(ctx.breadcrumbs.get(), [
+        { title: 'Post 1', url: '/posts/post-1', name: undefined },
+      ])
     })
 
     await rollback(db)

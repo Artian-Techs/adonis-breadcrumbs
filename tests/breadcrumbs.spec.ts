@@ -11,7 +11,7 @@ import { setupApp } from '../test_helpers/index.js'
 import { BreadcrumbsMiddleware } from '../src/breadcrumbs_middleware.js'
 
 test.group('Breadcrumbs', () => {
-  test('get method should return an object', async ({ assert }) => {
+  test('get method should return an array', async ({ assert }) => {
     const router = new RouterFactory().create()
     const route = router.get('/', async () => {})
     router.commit()
@@ -25,10 +25,10 @@ test.group('Breadcrumbs', () => {
 
     const breadcrumbs = new Breadcrumbs(router, registry, ctx)
 
-    assert.isObject(breadcrumbs.get())
+    assert.isArray(breadcrumbs.get())
   })
 
-  test('get method should return an object containing the information of the current route breadcrumbs', async ({
+  test('get method should return the information of the current route breadcrumbs', async ({
     assert,
   }) => {
     const router = new RouterFactory().create()
@@ -43,15 +43,16 @@ test.group('Breadcrumbs', () => {
     ctx.route = router.match(ctx.request.url(), ctx.request.method())!.route
 
     const breadcrumbs = new Breadcrumbs(router, registry, ctx)
-    const breadcrumbItem = breadcrumbs.get()
+    const items = breadcrumbs.get()
+    const firstItem = items.at(0)!
 
-    assert.property(breadcrumbItem, 'title')
-    assert.property(breadcrumbItem, 'url')
-    assert.equal(breadcrumbItem?.title, 'Foo')
-    assert.equal(breadcrumbItem?.url, '/')
+    assert.property(firstItem, 'title')
+    assert.property(firstItem, 'url')
+    assert.equal(firstItem.title, 'Foo')
+    assert.equal(firstItem.url, '/')
   })
 
-  test('get method should return an object containing the information of the current route parent breadcrumbs', async ({
+  test('get method should return the information of the current route and its parent breadcrumbs', async ({
     assert,
   }) => {
     const router = new RouterFactory().create()
@@ -68,18 +69,17 @@ test.group('Breadcrumbs', () => {
     ctx.route = router.match(ctx.request.url(), ctx.request.method())!.route
 
     const breadcrumbs = new Breadcrumbs(router, registry, ctx)
-    const breadcrumbItem = breadcrumbs.get()
+    const items = breadcrumbs.get()
 
-    assert.property(breadcrumbItem, 'parent')
-    assert.containsSubset(breadcrumbItem?.parent, {
-      title: 'Foo',
-      url: '/foo',
-    })
+    assert.strictEqual(items.at(0)!.url, '/foo')
+    assert.strictEqual(items.at(1)!.url, '/foo/1')
+    assert.containsSubset(items, [
+      { title: 'Foo', url: '/foo', name: undefined },
+      { title: 'Foo 1', url: '/foo/1', name: undefined },
+    ])
   })
 
-  test('get method should return an object containing the information of the current route ancestors breadcrumbs', async ({
-    assert,
-  }) => {
+  test('get method should return an ordered array of breadcrumb items', async ({ assert }) => {
     const router = new RouterFactory().create()
     const route1 = router.get('/foo', async () => {})
     const route2 = router.get('/foo/:foo', async () => {})
@@ -96,21 +96,16 @@ test.group('Breadcrumbs', () => {
     ctx.route = router.match(ctx.request.url(), ctx.request.method())!.route
 
     const breadcrumbs = new Breadcrumbs(router, registry, ctx)
-    const breadcrumbItem = breadcrumbs.get()
-    const parentItem = breadcrumbItem?.parent
-    const ancestorItem = parentItem?.parent
+    const items = breadcrumbs.get()
 
-    assert.property(breadcrumbItem, 'parent')
-    assert.containsSubset(parentItem, {
-      title: 'Foo 1',
-      url: '/foo/1',
-      parent: { title: 'Foo', url: '/foo' },
-    })
-    assert.property(parentItem, 'parent')
-    assert.containsSubset(ancestorItem, {
-      title: 'Foo',
-      url: '/foo',
-    })
+    assert.strictEqual(items.at(0)!.url, '/foo')
+    assert.strictEqual(items.at(1)!.url, '/foo/1')
+    assert.strictEqual(items.at(2)!.url, '/foo/1/bar')
+    assert.containsSubset(items, [
+      { title: 'Foo', url: '/foo', name: undefined },
+      { title: 'Foo 1', url: '/foo/1', name: undefined },
+      { title: 'Foo 1 Bar', url: '/foo/1/bar', name: undefined },
+    ])
   })
 
   test('title should be returned as-is if it has been registered as a string', async ({
@@ -130,7 +125,7 @@ test.group('Breadcrumbs', () => {
     const breadcrumbs = new Breadcrumbs(router, registry, ctx)
     const breadcrumbItem = breadcrumbs.get()
 
-    assert.equal(breadcrumbItem?.title, 'Foo')
+    assert.equal(breadcrumbItem.at(0)!.title, 'Foo')
   })
 
   test('title callback should be executed if it has been registered as a closure', async ({
@@ -150,7 +145,7 @@ test.group('Breadcrumbs', () => {
     const breadcrumbs = new Breadcrumbs(router, registry, ctx)
     const breadcrumbItem = breadcrumbs.get()
 
-    assert.equal(breadcrumbItem?.title, 'Foo')
+    assert.equal(breadcrumbItem.at(0)!.title, 'Foo')
   })
 
   test('title callback first parameter must always be an instance of HttpContext', async ({
@@ -174,7 +169,7 @@ test.group('Breadcrumbs', () => {
     new Breadcrumbs(router, registry, ctx)
   })
 
-  test('breadcrumbs method should return the breadcrumbs object for the current route', async ({
+  test('HttpContext | breadcrumbs.get should return the breadcrumbs for the current route', async ({
     assert,
   }) => {
     const app = await setupApp()
@@ -219,33 +214,31 @@ test.group('Breadcrumbs', () => {
       .title((_: HttpContext, foo: Foo) => `${foo.title} ${foo.id} - Bars title`)
     router
       .get('/foos/:foo/bars/:bar', async ({ breadcrumbs }) => {
-        assert.containsSubset(breadcrumbs.get(), {
-          title: 'Current Foo title - Current Bar title',
-          url: '/foos/1/bars/5',
-          parent: {
-            title: 'Current Foo title 1 - Bars title',
-            url: '/foos/1/bars',
-            parent: {
-              title: 'Current Foo title',
-              url: '/foos/1',
-              parent: {
-                title: 'Foos title',
-                url: '/foos',
-                parent: { title: 'Home title', url: '/' },
-              },
-            },
-          },
-        })
+        return breadcrumbs.get()
       })
       .title((_: HttpContext, foo: Foo, bar: Bar) => {
         return `${foo.title} - ${bar.title}`
       })
     await server.boot()
 
-    await supertest(httpServer).get('/foos/1/bars/5')
+    const { body } = await supertest(httpServer).get('/foos/1/bars/5')
+
+    assert.deepEqual(body, [
+      { title: 'Home title', url: '/' },
+      { title: 'Foos title', url: '/foos' },
+      { title: 'Current Foo title', url: '/foos/1' },
+      {
+        title: 'Current Foo title 1 - Bars title',
+        url: '/foos/1/bars',
+      },
+      {
+        title: 'Current Foo title - Current Bar title',
+        url: '/foos/1/bars/5',
+      },
+    ])
   })
 
-  test('breadcrumbs method should return the breadcrumbs object for the current resource route', async ({
+  test('HttpContext | breadcrumbs.get should return the breadcrumbs for the current resource route', async ({
     assert,
   }) => {
     const app = await setupApp()
@@ -260,11 +253,7 @@ test.group('Breadcrumbs', () => {
 
     class PostsController {
       async show({ breadcrumbs }: HttpContext) {
-        assert.containsSubset(breadcrumbs.get(), {
-          title: 'Post - Foo',
-          url: '/posts/1',
-          parent: { title: 'All posts', url: '/posts' },
-        })
+        return breadcrumbs.get()
       }
     }
 
@@ -294,6 +283,10 @@ test.group('Breadcrumbs', () => {
     })
     await server.boot()
 
-    await supertest(httpServer).get('/posts/1')
+    const { body } = await supertest(httpServer).get('/posts/1')
+    assert.deepEqual(body, [
+      { title: 'All posts', url: '/posts', name: 'posts.index' },
+      { title: 'Post - Foo', url: '/posts/1', name: 'posts.show' },
+    ])
   })
 })

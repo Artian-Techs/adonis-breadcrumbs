@@ -1,4 +1,4 @@
-import type { HttpContext } from '@adonisjs/http-server'
+import type { HttpContext } from '@adonisjs/core/http'
 import type { BreadcrumbsRegistry } from './breadcrumbs_registry.js'
 import type { BreadcrumbItem } from './types.js'
 
@@ -39,7 +39,7 @@ export class BreadcrumbsTrail {
     return this
   }
 
-  organize() {
+  /* organize() {
     return (
       this.#breadcrumbs.reduce(
         (previousItem: BreadcrumbItem, currentItem: BreadcrumbItem, index) => {
@@ -52,5 +52,5 @@ export class BreadcrumbsTrail {
         this.#breadcrumbs.at(-1)!
       ) ?? {}
     )
-  }
+  } */
 }

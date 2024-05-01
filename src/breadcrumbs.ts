@@ -1,3 +1,5 @@
+/// <reference types="@adonisjs/route-model-binding/rmb_middleware" />
+
 import type { StoreRouteNode } from '@adonisjs/core/types/http'
 import type { HttpRouterService } from '@adonisjs/core/types'
 import type { HttpContext } from '@adonisjs/core/http'
@@ -53,6 +55,12 @@ export class Breadcrumbs {
   }
 
   get(routeName?: string) {
+    const items = this.#trail.items
+
+    if (items.length > 0) {
+      return items
+    }
+
     if (routeName) {
       const callback = this.#registry.getNamedRouteCallback(routeName)
       callback(this.#ctx, this.#trail, ...this.#resources)
@@ -60,11 +68,11 @@ export class Breadcrumbs {
       this.#buildBreadcrumbs()
     }
 
-    return this.#trail.organize()
+    return items
   }
 
   #setResources() {
-    const resolvedParams = new ParamsParser(this.#route.meta.params).parse()
+    const resolvedParams = new ParamsParser(this.#route.meta.params ?? []).parse()
 
     if (this.#ctx.resources) {
       this.#resources.push(...resolvedParams.map((param) => this.#ctx.resources[param]))
@@ -82,7 +90,7 @@ export class Breadcrumbs {
         this.#trail.push(
           typeof title === 'function' ? title(this.#ctx, ...this.#resources) : title,
           urlFragments[i],
-          this.#route.name
+          this.#router.findOrFail(fragment).name
         )
       }
     }

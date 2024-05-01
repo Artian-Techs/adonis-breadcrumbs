@@ -82,4 +82,15 @@ test.group('BreadcrumbsRegistry', () => {
 
     assert.equal(registry.getTitleByRoutePattern('/foo'), 'Foo')
   })
+
+  test('for method should register a named route to the registry', async ({ assert }) => {
+    const router = new RouterFactory().create()
+    router.get('/foo', async () => {}).as('foo')
+    router.commit()
+
+    const registry = new BreadcrumbsRegistry(router)
+    registry.for('foo', () => {})
+
+    assert.property(registry.namedRoutes, 'foo')
+  })
 })

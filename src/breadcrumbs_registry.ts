@@ -1,7 +1,7 @@
 import type { HttpRouterService } from '@adonisjs/core/types'
 
 import { BreadcrumbsTrail } from './breadcrumbs_trail.js'
-import { HttpContext, Route } from '@adonisjs/http-server'
+import { HttpContext, Route } from '@adonisjs/core/http'
 import { RouteJSON } from '@adonisjs/http-server/types'
 
 export class BreadcrumbsRegistry {
@@ -20,6 +20,10 @@ export class BreadcrumbsRegistry {
 
   get routes() {
     return this.#routes
+  }
+
+  get namedRoutes() {
+    return this.#namedRoutes
   }
 
   getNamedRouteCallback(routeName: string) {

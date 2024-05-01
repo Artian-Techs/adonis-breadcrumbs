@@ -1,53 +1,60 @@
-import { createServer } from 'node:http'
-import supertest from 'supertest'
 import { test } from '@japa/runner'
-import { NextFn } from '@adonisjs/http-server/types'
-import { HttpContext } from '@adonisjs/core/http'
-import { RouterFactory, HttpContextFactory, RequestFactory } from '@adonisjs/http-server/factories'
+import { RouterFactory, HttpContextFactory } from '@adonisjs/http-server/factories'
 
 import { BreadcrumbsRegistry } from '../src/breadcrumbs_registry.js'
-import { Breadcrumbs } from '../src/breadcrumbs.js'
-import { setupApp } from '../test_helpers/index.js'
-import { BreadcrumbsMiddleware } from '../src/breadcrumbs_middleware.js'
 import { BreadcrumbsTrail } from '../src/breadcrumbs_trail.js'
+import { Breadcrumbs } from '../src/breadcrumbs.js'
 
 test.group('BreadcrumbsTrail', () => {
-  test('for method should register named routes', async ({ assert }) => {
+  test('items attribute should be an array', async ({ assert }) => {
     const router = new RouterFactory().create()
-    router.get('/', async () => {}).as('home')
-    router.get('/foo', async () => {}).as('foo')
-    router.get('/foo/:foo', async () => {}).as('foo.show')
+    const ctx = new HttpContextFactory().create()
+    const registry = new BreadcrumbsRegistry(router)
+
+    const trail = new BreadcrumbsTrail(registry, ctx, [])
+    assert.isArray(trail.items)
+  })
+
+  test('push method should add breadcrumb items to the trail', async ({ assert }) => {
+    const router = new RouterFactory().create()
+    const ctx = new HttpContextFactory().create()
+    const registry = new BreadcrumbsRegistry(router)
+
+    const trail = new BreadcrumbsTrail(registry, ctx, [])
+    trail.push('Foos', '/foos', 'foos.index')
+    trail.push('Foo - 1', '/foo/1', 'foos.show')
+
+    assert.deepEqual(trail.items, [
+      { title: 'Foos', url: '/foos', name: 'foos.index' },
+      { title: 'Foo - 1', url: '/foo/1', name: 'foos.show' },
+    ])
+  })
+
+  test('parent method should execute the callback of a route registered with BreadcrumbsRegistry.for method', async ({
+    assert,
+  }) => {
+    const router = new RouterFactory().create()
+    router.get('/', () => {}).as('home')
+    router.get('/foos', () => {}).as('foos')
     router.commit()
 
     const ctx = new HttpContextFactory().create()
-    ctx.request = new RequestFactory().merge({ url: '/foo/1', method: 'GET' }).create()
-    ctx.route = router.match(ctx.request.url(), ctx.request.method())!.route
-    ctx.resources = {
-      foo: { id: 1, title: 'Foo' },
-    }
+    ctx.route = router.match('/foos', 'GET')!.route
 
     const registry = new BreadcrumbsRegistry(router)
-    registry.for('home', (_: HttpContext, trail) => {
-      trail.push('Home', '/')
+    registry.for('home', (_, trail) => {
+      trail.push('Home', '/', 'home')
     })
-    registry.for('foo', (_: HttpContext, trail) => {
+    registry.for('foos', (_, trail) => {
       trail.parent('home')
-      trail.push('Foo parent', '/foo')
-    })
-    registry.for('foo.show', ({ request }: HttpContext, trail, foo) => {
-      trail.parent('foo')
-      trail.push(foo.title, request.url())
+      trail.push('Foos', '/foos', 'foos')
     })
 
     const breadcrumbs = new Breadcrumbs(router, registry, ctx)
-    assert.containsSubset(breadcrumbs.get('foo.show'), {
-      title: 'Foo',
-      url: '/foo/1',
-      parent: {
-        title: 'Foo parent',
-        url: '/foo',
-        parent: { title: 'Home', url: '/' },
-      },
-    })
+
+    assert.deepEqual(breadcrumbs.get('foos'), [
+      { title: 'Home', url: '/', name: 'home' },
+      { title: 'Foos', url: '/foos', name: 'foos' },
+    ])
   })
 })
