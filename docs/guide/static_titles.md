@@ -48,16 +48,86 @@ The same array can be generated in Edge and/or Inertia views.
 
 ### Using Edge
 
-```edge
+```pug [Edge]
 <ol>
-  @each((breadcrumb, index) in breadcrumb.get())
+  @each((breadcrumb, index) in breadcrumbs.get())
     <li>
       <span><a href="{{ breadcrumb.url }}">{{ breadcrumb.title }}</a></span>
 
-      @if(index < breadcrumb.get() - 1)
+      @if(index < breadcrumbs.get().length - 1)
         <span>/</span>
       @end
     </li>
   @end
 </ol>
 ```
+
+### Using Inertia
+
+::: code-group
+
+```vue [Vue]
+<script setup lang="ts">
+import type { Breadcrumbs } from '@artian-techs/breadcrumbs/types'
+
+defineProps<{
+  // ... other props
+  breadcrumbs: Breadcrumbs
+}>()
+</script>
+
+<template>
+  <ol>
+    <li v-for="(breadcrumb, index) in breadcrumbs.get()" :key="index">
+      <span>
+        <a href="{{ breadcrumb.url }}">{{ breadcrumb.title }}</a>
+      </span>
+
+      <span v-if="index < breadcrumbs.get() - 1">/</span>
+    </li>
+  </ol>
+</template>
+```
+
+```tsx [TSX]
+import type { Breadcrumbs } from '@artian-techs/breadcrumbs/types'
+
+export default function Home(props: { user: { name: string } }) {
+  return (
+    <ol>
+      {breadcrumbs.map((breadcrumb, index) => (
+        <li key={index}>
+          <span>
+            <a href={breadcrumb.url}>{breadcrumb.title}</a>
+          </span>
+
+          {index < breadcrumbs.length - 1 && <span>/</span>}
+        </li>
+      ))}
+    </ol>
+  )
+}
+```
+
+```svelte [Svelte]
+<script>
+  import type { Breadcrumbs } from '@artian-techs/breadcrumbs/types'
+
+  export let breadcrumbs: Breadcrumbs;
+</script>
+
+<ol>
+  {#each breadcrumbs.get() as breadcrumb, index}
+    <li>
+      <span>
+        <a href={breadcrumb.url}>{breadcrumb.title}</a>
+      </span>
+      {#if index < breadcrumbs.get().length - 1}
+        <span>/</span>
+      {/if}
+    </li>
+  {/each}
+</ol>
+```
+
+:::
