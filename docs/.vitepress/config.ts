@@ -43,6 +43,7 @@ export default defineConfig({
   description: 'Add breadcrumbs to AdonisJS routes only by defining titles',
   lastUpdated: true,
   lang: 'en-US',
+  ignoreDeadLinks: ['./instructions'],
 
   head: [
     ['meta', { property: 'og:title', content: 'Adonis Breadcrumbs' }],
