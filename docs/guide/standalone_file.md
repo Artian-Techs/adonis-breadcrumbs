@@ -70,7 +70,7 @@ The `https://your-site.com/admin/dashboard` url should return an ordered array c
 
 ## Resource routes
 
-Titles for resource routes can also be defined in a separate file. However, the full route names (i.e with all prefixes), must be as keys.
+Titles for resource routes can also be defined in a separate file. However, full routes names (i.e with all prefixes), must be used as keys.
 
 ```typescript
 // start/routes.ts
