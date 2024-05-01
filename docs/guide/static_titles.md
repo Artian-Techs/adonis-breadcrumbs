@@ -92,7 +92,7 @@ defineProps<{
 ```tsx [TSX]
 import type { Breadcrumbs } from '@artian-techs/breadcrumbs/types'
 
-export default function Home(props: { user: { name: string } }) {
+export default function Home(props: { breadcrumbs: Breadcrumbs }) {
   return (
     <ol>
       {breadcrumbs.map((breadcrumb, index) => (
