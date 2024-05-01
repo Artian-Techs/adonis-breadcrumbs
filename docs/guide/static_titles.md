@@ -36,14 +36,28 @@ export default class AdminDashboardController {
 In this example, the `https://your-site.com/admin/dashboard` URL should return an ordered array containing the breadcrumbs of the `/admin/dashboard` route.
 
 ```json
-{
-  "url": "/admin/dashboard",
-  "title": "Admin dashboard",
-  "name": undefined,
-  "parent": {
-    "url": "/",
-    "title": "Home",
-    "name": undefined
-  }
-}
+[
+  { "url": "/", "title": "Home", "name": undefined },
+  { "url": "/admin/dashboard", "title": "Admin dashboard", "name": undefined }
+]
+```
+
+## Views and Templates
+
+The same array can be generated in Edge and/or Inertia views.
+
+### Using Edge
+
+```edge
+<ol>
+  @each((breadcrumb, index) in breadcrumb.get())
+    <li>
+      <span><a href="{{ breadcrumb.url }}">{{ breadcrumb.title }}</a></span>
+
+      @if(index < breadcrumb.get() - 1)
+        <span>/</span>
+      @end
+    </li>
+  @end
+</ol>
 ```
