@@ -39,8 +39,9 @@ export class BreadcrumbsRegistry {
    * Register a named route from outside the router, by its name
    */
   for(routeName: string, cb: (ctx: HttpContext, trail: BreadcrumbsTrail, ...args: any[]) => void) {
-    const route = this.#router.findOrFail(routeName)
+    this.#router.commit()
 
+    const route = this.#router.findOrFail(routeName)
     this.#ensureIsGetRoute(route)
 
     if (!this.#namedRoutes[routeName]) {
