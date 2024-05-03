@@ -108,6 +108,57 @@ test.group('Breadcrumbs', () => {
     ])
   })
 
+  test('skip method should remove specified route by its name from the breadcrumbs array', async ({
+    assert,
+  }) => {
+    const router = new RouterFactory().create()
+    const route1 = router.get('/foo', async () => {}).as('foos')
+    const route2 = router.get('/foo/:foo', async () => {}).as('foos.foo')
+    const route3 = router.get('/foo/:foo/bar', async () => {}).as('foos.foo.bar')
+    router.commit()
+
+    const registry = new BreadcrumbsRegistry(router)
+    registry.register(route1, 'Foo')
+    registry.register(route2, 'Foo 1')
+    registry.register(route3, 'Foo 1 Bar')
+
+    const ctx = new HttpContextFactory().create()
+    ctx.request = new RequestFactory().merge({ url: '/foo/1/bar', method: 'GET' }).create()
+    ctx.route = router.match(ctx.request.url(), ctx.request.method())!.route
+
+    const breadcrumbs = new Breadcrumbs(router, registry, ctx)
+    const items = breadcrumbs.skip('foos.foo')
+
+    assert.deepEqual(items, [
+      { title: 'Foo', url: '/foo', name: 'foos' },
+      { title: 'Foo 1 Bar', url: '/foo/1/bar', name: 'foos.foo.bar' },
+    ])
+  })
+
+  test('skip method should remove specified routes by their names from the breadcrumbs array', async ({
+    assert,
+  }) => {
+    const router = new RouterFactory().create()
+    const route1 = router.get('/foo', async () => {}).as('foos')
+    const route2 = router.get('/foo/:foo', async () => {}).as('foos.foo')
+    const route3 = router.get('/foo/:foo/bar', async () => {}).as('foos.foo.bar')
+    router.commit()
+
+    const registry = new BreadcrumbsRegistry(router)
+    registry.register(route1, 'Foo')
+    registry.register(route2, 'Foo 1')
+    registry.register(route3, 'Foo 1 Bar')
+
+    const ctx = new HttpContextFactory().create()
+    ctx.request = new RequestFactory().merge({ url: '/foo/1/bar', method: 'GET' }).create()
+    ctx.route = router.match(ctx.request.url(), ctx.request.method())!.route
+
+    const breadcrumbs = new Breadcrumbs(router, registry, ctx)
+    const items = breadcrumbs.skip(['foos', 'foos.foo'])
+
+    assert.deepEqual(items, [{ title: 'Foo 1 Bar', url: '/foo/1/bar', name: 'foos.foo.bar' }])
+  })
+
   test('title should be returned as-is if it has been registered as a string', async ({
     assert,
   }) => {

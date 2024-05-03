@@ -55,10 +55,8 @@ export class Breadcrumbs {
   }
 
   get(routeName?: string) {
-    const items = this.#trail.items
-
-    if (items.length > 0) {
-      return items
+    if (this.#trail.items.length > 0) {
+      return this.#trail.items
     }
 
     if (routeName) {
@@ -68,7 +66,16 @@ export class Breadcrumbs {
       this.#build()
     }
 
-    return items
+    return this.#trail.items
+  }
+
+  /**
+   * Return breadcrumbs without the specified routes
+   */
+  skip(routeNames: string | string[]) {
+    const routes = Array.isArray(routeNames) ? routeNames : [routeNames]
+
+    return this.get().filter((item) => !routes.includes(item.name!))
   }
 
   #setResources() {
