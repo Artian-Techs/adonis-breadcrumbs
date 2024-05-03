@@ -9,7 +9,7 @@ import { HttpContext } from '@adonisjs/core/http'
 import { Breadcrumbs } from './breadcrumbs.js'
 import { BreadcrumbsRegistry } from './breadcrumbs_registry.js'
 
-export class BreadcrumbsMiddleware {
+export default class BreadcrumbsMiddleware {
   constructor(
     protected router: HttpRouterService,
     protected registry: BreadcrumbsRegistry

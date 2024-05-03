@@ -8,7 +8,7 @@ import { RouterFactory, HttpContextFactory, RequestFactory } from '@adonisjs/htt
 import { BreadcrumbsRegistry } from '../src/breadcrumbs_registry.js'
 import { Breadcrumbs } from '../src/breadcrumbs.js'
 import { setupApp } from '../test_helpers/index.js'
-import { BreadcrumbsMiddleware } from '../src/breadcrumbs_middleware.js'
+import BreadcrumbsMiddleware from '../src/breadcrumbs_middleware.js'
 
 test.group('Breadcrumbs', () => {
   test('get method should return an array', async ({ assert }) => {
@@ -101,7 +101,7 @@ test.group('Breadcrumbs', () => {
     assert.strictEqual(items.at(0)!.url, '/foo')
     assert.strictEqual(items.at(1)!.url, '/foo/1')
     assert.strictEqual(items.at(2)!.url, '/foo/1/bar')
-    assert.containsSubset(items, [
+    assert.deepEqual(items, [
       { title: 'Foo', url: '/foo', name: undefined },
       { title: 'Foo 1', url: '/foo/1', name: undefined },
       { title: 'Foo 1 Bar', url: '/foo/1/bar', name: undefined },

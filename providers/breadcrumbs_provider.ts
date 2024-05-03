@@ -3,7 +3,7 @@ import type { RouteTitle, Title } from '../src/types.js'
 import type { Breadcrumbs } from '../src/breadcrumbs.js'
 
 import { BreadcrumbsRegistry } from '../src/breadcrumbs_registry.js'
-import { BreadcrumbsMiddleware } from '../src/breadcrumbs_middleware.js'
+import BreadcrumbsMiddleware from '../src/breadcrumbs_middleware.js'
 
 declare module '@adonisjs/core/types' {
   export interface ContainerBindings {

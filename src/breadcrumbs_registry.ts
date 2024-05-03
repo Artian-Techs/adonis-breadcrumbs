@@ -1,4 +1,5 @@
 import type { HttpRouterService } from '@adonisjs/core/types'
+import type { Title } from './types.js'
 
 import { BreadcrumbsTrail } from './breadcrumbs_trail.js'
 import { HttpContext, Route } from '@adonisjs/core/http'
@@ -7,7 +8,7 @@ import { RouteJSON } from '@adonisjs/http-server/types'
 export class BreadcrumbsRegistry {
   #router: HttpRouterService
 
-  #routes: Record<string, string | ((...args: any[]) => string)> = {}
+  #routes: Record<string, Title> = {}
 
   #namedRoutes: Record<
     string,
@@ -35,7 +36,7 @@ export class BreadcrumbsRegistry {
   }
 
   /**
-   * Register a named route from outside the router
+   * Register a named route from outside the router, by its name
    */
   for(routeName: string, cb: (ctx: HttpContext, trail: BreadcrumbsTrail, ...args: any[]) => void) {
     const route = this.#router.findOrFail(routeName)
@@ -52,7 +53,7 @@ export class BreadcrumbsRegistry {
   /**
    * Register a new pair of route and title/callback
    */
-  register(route: Route, title: string | ((...args: any[]) => string)) {
+  register(route: Route, title: Title) {
     this.#ensureIsGetRoute(route.toJSON())
 
     const pattern = route.getPattern()

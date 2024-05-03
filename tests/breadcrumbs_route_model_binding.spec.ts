@@ -9,7 +9,7 @@ import { bind } from '@adonisjs/route-model-binding'
 
 import { BreadcrumbsRegistry } from '../src/breadcrumbs_registry.js'
 import { migrate, rollback, setupApp } from '../test_helpers/index.js'
-import { BreadcrumbsMiddleware } from '../src/breadcrumbs_middleware.js'
+import BreadcrumbsMiddleware from '../src/breadcrumbs_middleware.js'
 
 test.group('Breadcrumbs - Route Model Binding', () => {
   test('get method should return correct data when route model binding is used', async ({

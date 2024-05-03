@@ -1,6 +1,8 @@
-import { Breadcrumbs as BreadcrumbsType } from './breadcrumbs.js'
+import type { HttpContext } from '@adonisjs/core/http'
 
-export type Title = string | ((...args: any[]) => string)
+import type { Breadcrumbs as BreadcrumbsType } from './breadcrumbs.js'
+
+export type Title = string | ((ctx: HttpContext, ...args: any[]) => string)
 
 export type RouteTitle<T> = (title: Title) => T
 

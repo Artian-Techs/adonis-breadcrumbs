@@ -4,6 +4,12 @@
   "private": true,
   "type": "module",
   "license": "MIT",
+  "files": [
+    "build",
+    "!build/bin",
+    "!build/tests",
+    "!build/tests_helpers"
+  ],
   "exports": {
     ".": "./build/index.js",
     "./breadcrumbs_provider": "./build/providers/breadcrumbs_provider.js",
