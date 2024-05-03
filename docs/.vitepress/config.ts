@@ -33,6 +33,10 @@ const guidesNav = [
         text: 'Standalone file',
         link: '/guide/standalone_file',
       },
+      {
+        text: 'Skip routes',
+        link: '/guide/skip_routes',
+      },
     ],
   },
 ]

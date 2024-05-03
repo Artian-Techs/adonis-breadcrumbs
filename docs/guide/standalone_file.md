@@ -1,6 +1,6 @@
 # Standalone file
 
-If you worry about clean routes files, you can define the titles in a separate file.
+If you worry about clean routes files, you can define the titles in a separate file. However, it is preferable to define titles in the same file as the routes because if you are using a standalone file, you will have to write URLs manually.
 
 ## Create a new file
 
@@ -12,7 +12,7 @@ node ace make:preload breadcrumbs
 
 ## Define titles
 
-Go to the newly created file in `start/breadcrumbs.ts` and start defining the titles for named routes.
+Go to the newly created file in `start/breadcrumbs.ts` and define the titles for named routes.
 
 ```typescript
 // start/routes.ts
@@ -29,17 +29,21 @@ router.get('/admin/dashboard', () => {}).name('admin.dashboard')
 import { HttpContext } from '@adonisjs/core/http'
 import Breadcrumbs from '@artian-techs/adonis-breadcrumbs/services/registry'
 
-Breadcrumbs.for('home', (trail, { request }: HttpContext) => {
-  trail.push('Home', request.url())
+Breadcrumbs.for('home', ({ request }, trail) => {
+  trail.push('Home', '/')
 })
 
-Breadcrumbs.for('admin.dashboard', (trail, ctx: HttpContext) => {
+Breadcrumbs.for('admin.dashboard', (ctx, trail) => {
   trail.parent('home')
-  trail.push('Admin dashboard', 'https://your-site.com/admin/dashboard')
+  trail.push('Admin dashboard', '/admin/dashboard')
 })
 ```
 
 In the example above, we have defined two titles for our two routes. The `Breadcrumbs.for` method accepts a route name as argument and if the route is not found, an exception will be thrown. The second argument is a callback that accepts an instance of `BreadcrumbsTrail` as first argument, the HTTP context as second argument, and the remaining arguments are the models if route binding model is used. The `trail.push` method adds a new pair of title and URL (it is important, it is not the route pattern but the URL for that route). The `trail.parent` method adds a breadcrumb parent to the current breadcrumb item.
+
+::: warning
+When a route has one parent or more, bear in mind that the HTTP context of the current route will be passed to **_all_** parents. Which means that when you define a title for one of the parents, and calling for example `ctx.request.url()`, it will return the URL of the current request and not the URL of the parent.
+:::
 
 ## Get breadcrumbs
 
@@ -61,7 +65,7 @@ The `https://your-site.com/admin/dashboard` url should return an ordered array c
 [
   { "url": "/", "title": "Home", "name": "home" },
   {
-    "url": "https://your-site.com/admin/dashboard",
+    "url": "/admin/dashboard",
     "title": "Admin dashboard",
     "name": "admin.dashboard"
   }
@@ -88,22 +92,30 @@ router.resource('posts', PostsController)
 
 import Breadcrumbs from '@artian-techs/adonis-breadcrumbs/services/registry'
 
-Breadcrumbs.for('posts.index', (trail, ctx) => {
-  trail.push('All posts', ctx.request.url())
+Breadcrumbs.for('posts.index', (ctx, trail) => {
+  trail.push('All posts', '/posts')
 })
 
-Breadcrumbs.for('posts.create', (trail, ctx) => {
+Breadcrumbs.for('posts.create', (ctx, trail) => {
   trail.parent('posts.index')
-  trail.push(ctx.i18n.t('posts.create'), ctx.request.url())
+  trail.push(ctx.i18n.t('posts.create'), '/posts/create')
 })
 
-Breadcrumbs.for('posts.show', (trail, ctx, post: Post) => {
+/**
+ * In case route model bindings package is used,
+ * you can access to the post model
+ */
+Breadcrumbs.for('posts.show', (ctx, trail, post: Post) => {
   trail.parent('posts.index')
-  trail.push(post.title, ctx.request.url())
+  trail.push(post.title, `/posts/${post.id}`)
 })
 
-Breadcrumbs.for('posts.edit', (trail, ctx, post: Post) => {
+/**
+ * In case route model bindings package is used,
+ * you can access to the post model
+ */
+Breadcrumbs.for('posts.edit', (ctx, trail, post: Post) => {
   trail.parent('posts.show')
-  trail.push('Edit', ctx.request.url())
+  trail.push(post.title, `/posts/${post.id}`)
 })
 ```

@@ -16,7 +16,7 @@ The `title` method accepts also a callback as the only argument. This callback a
 :::
 
 ::: warning
-Please, be aware that if a route and its parent/ancestors route(s) are using a callback as argument for `title` method, the HTTP context of the current route will be shared with the parent/ancestors, which makes sense as a request cannot have more than one HTTP context at the same time.
+When a route has one parent or more, bear in mind that the HTTP context of the current route will be passed to **_all_** parents. Which means that when you define a title for one of the parents, which is using a callback as argument instead of a string, and calling for example `ctx.request.url()`, it will return the URL of the current request and not the URL of the parent.
 :::
 
 ## Get breadcrumbs
