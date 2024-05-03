@@ -11,7 +11,7 @@ test.group('BreadcrumbsTrail', () => {
     const ctx = new HttpContextFactory().create()
     const registry = new BreadcrumbsRegistry(router)
 
-    const trail = new BreadcrumbsTrail(registry, ctx, [])
+    const trail = new BreadcrumbsTrail(registry, router, ctx, [])
     assert.isArray(trail.items)
   })
 
@@ -20,7 +20,7 @@ test.group('BreadcrumbsTrail', () => {
     const ctx = new HttpContextFactory().create()
     const registry = new BreadcrumbsRegistry(router)
 
-    const trail = new BreadcrumbsTrail(registry, ctx, [])
+    const trail = new BreadcrumbsTrail(registry, router, ctx, [])
     trail.push('Foos', '/foos', 'foos.index')
     trail.push('Foo - 1', '/foo/1', 'foos.show')
 

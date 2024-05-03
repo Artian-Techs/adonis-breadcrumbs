@@ -1,9 +1,12 @@
 import type { HttpContext } from '@adonisjs/core/http'
+import type { HttpRouterService } from '@adonisjs/core/types'
 import type { BreadcrumbsRegistry } from './breadcrumbs_registry.js'
 import type { BreadcrumbItem } from './types.js'
 
 export class BreadcrumbsTrail {
   #registry: BreadcrumbsRegistry
+
+  #router: HttpRouterService
 
   #ctx: HttpContext
 
@@ -11,8 +14,14 @@ export class BreadcrumbsTrail {
 
   #breadcrumbs: BreadcrumbItem[] = []
 
-  constructor(registry: BreadcrumbsRegistry, ctx: HttpContext, resources: Record<string, any>[]) {
+  constructor(
+    registry: BreadcrumbsRegistry,
+    router: HttpRouterService,
+    ctx: HttpContext,
+    resources: Record<string, any>[]
+  ) {
     this.#registry = registry
+    this.#router = router
     this.#ctx = ctx
     this.#resources = resources
   }

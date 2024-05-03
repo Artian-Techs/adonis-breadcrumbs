@@ -51,7 +51,7 @@ export class Breadcrumbs {
 
     this.#setResources()
 
-    this.#trail = new BreadcrumbsTrail(this.#registry, this.#ctx, this.#resources)
+    this.#trail = new BreadcrumbsTrail(this.#registry, this.#router, this.#ctx, this.#resources)
   }
 
   get(routeName?: string) {
@@ -65,7 +65,7 @@ export class Breadcrumbs {
       const callback = this.#registry.getNamedRouteCallback(routeName)
       callback(this.#ctx, this.#trail, ...this.#resources)
     } else {
-      this.#buildBreadcrumbs()
+      this.#build()
     }
 
     return items
@@ -79,7 +79,7 @@ export class Breadcrumbs {
     }
   }
 
-  #buildBreadcrumbs() {
+  #build() {
     const patternFragments = this.#getFragments(this.#route.pattern)
     const urlFragments = this.#getFragments(this.#url)
 
