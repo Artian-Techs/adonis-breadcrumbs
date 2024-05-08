@@ -64,6 +64,7 @@ test.group('Breadcrumbs - Route Model Binding', () => {
 
     const registry = new BreadcrumbsRegistry(router)
     registry.register(route, (_: HttpContext, post: Post) => post.title)
+    registry.computePatterns()
 
     const ctx = new HttpContextFactory()
       .merge({
@@ -140,6 +141,7 @@ test.group('Breadcrumbs - Route Model Binding', () => {
       route,
       (_: HttpContext, post: Post, comment: Comment) => `${post.title} - Comment ${comment.id}`
     )
+    registry.computePatterns()
 
     const ctx = new HttpContextFactory()
       .merge({
@@ -215,6 +217,7 @@ test.group('Breadcrumbs - Route Model Binding', () => {
 
     const registry = new BreadcrumbsRegistry(router)
     registry.register(route, (_: HttpContext, post: Post) => post.title)
+    registry.computePatterns()
 
     const ctx = new HttpContextFactory()
       .merge({

@@ -18,7 +18,6 @@ declare module '@adonisjs/core/http' {
 
   export interface RouteResource {
     titles: (titles: Record<string, Title>) => this
-    title: RouteTitle<this>
   }
   interface HttpContext {
     breadcrumbs: InstanceType<typeof Breadcrumbs>
@@ -44,5 +43,10 @@ export default class BreadcrumbsProvider {
   async boot() {
     const { addRoutePlugin } = await import('../src/extensions.js')
     addRoutePlugin(await this.app.container.make('breadcrumbs.registry'))
+  }
+
+  async ready() {
+    const registry = await this.app.container.make('breadcrumbs.registry')
+    registry.computePatterns()
   }
 }

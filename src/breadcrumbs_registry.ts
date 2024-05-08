@@ -8,7 +8,17 @@ import { RouteJSON } from '@adonisjs/http-server/types'
 export class BreadcrumbsRegistry {
   #router: HttpRouterService
 
+  /**
+   * Routes registry. Keys are patterns and values are title strings/callbacks
+   */
   #routes: Record<string, Title> = {}
+
+  /**
+   * Temporary storage for route instances and titles/callbacks.
+   * The instances will be fetched during application post-starting phase
+   * (i.e: when provider's `ready` method is executed) to get the correct pattern.
+   */
+  #tmp: Array<[Route, Title]> = []
 
   #namedRoutes: Record<
     string,
@@ -25,6 +35,23 @@ export class BreadcrumbsRegistry {
 
   get namedRoutes() {
     return this.#namedRoutes
+  }
+
+  get temporaryRoutes() {
+    return this.#tmp
+  }
+
+  /**
+   * Register routes with their final patterns
+   */
+  computePatterns() {
+    for (const [route, title] of this.#tmp) {
+      const pattern = route.toJSON().pattern
+
+      if (!this.#routes[pattern]) {
+        this.#routes[pattern] = title
+      }
+    }
   }
 
   getNamedRouteCallback(routeName: string) {
@@ -56,12 +83,7 @@ export class BreadcrumbsRegistry {
    */
   register(route: Route, title: Title) {
     this.#ensureIsGetRoute(route.toJSON())
-
-    const pattern = route.getPattern()
-
-    if (!this.#routes[pattern]) {
-      this.#routes[pattern] = title
-    }
+    this.#tmp.push([route, title])
 
     return this
   }

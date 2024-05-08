@@ -18,6 +18,7 @@ test.group('Breadcrumbs', () => {
 
     const registry = new BreadcrumbsRegistry(router)
     registry.register(route, 'Foo')
+    registry.computePatterns()
 
     const ctx = new HttpContextFactory().create()
     ctx.request = new RequestFactory().merge({ url: '/', method: 'GET' }).create()
@@ -37,6 +38,7 @@ test.group('Breadcrumbs', () => {
 
     const registry = new BreadcrumbsRegistry(router)
     registry.register(route, 'Foo')
+    registry.computePatterns()
 
     const ctx = new HttpContextFactory().create()
     ctx.request = new RequestFactory().merge({ url: '/', method: 'GET' }).create()
@@ -63,6 +65,7 @@ test.group('Breadcrumbs', () => {
     const registry = new BreadcrumbsRegistry(router)
     registry.register(route1, 'Foo')
     registry.register(route2, 'Foo 1')
+    registry.computePatterns()
 
     const ctx = new HttpContextFactory().create()
     ctx.request = new RequestFactory().merge({ url: '/foo/1', method: 'GET' }).create()
@@ -90,6 +93,7 @@ test.group('Breadcrumbs', () => {
     registry.register(route1, 'Foo')
     registry.register(route2, 'Foo 1')
     registry.register(route3, 'Foo 1 Bar')
+    registry.computePatterns()
 
     const ctx = new HttpContextFactory().create()
     ctx.request = new RequestFactory().merge({ url: '/foo/1/bar', method: 'GET' }).create()
@@ -121,6 +125,7 @@ test.group('Breadcrumbs', () => {
     registry.register(route1, 'Foo')
     registry.register(route2, 'Foo 1')
     registry.register(route3, 'Foo 1 Bar')
+    registry.computePatterns()
 
     const ctx = new HttpContextFactory().create()
     ctx.request = new RequestFactory().merge({ url: '/foo/1/bar', method: 'GET' }).create()
@@ -148,6 +153,7 @@ test.group('Breadcrumbs', () => {
     registry.register(route1, 'Foo')
     registry.register(route2, 'Foo 1')
     registry.register(route3, 'Foo 1 Bar')
+    registry.computePatterns()
 
     const ctx = new HttpContextFactory().create()
     ctx.request = new RequestFactory().merge({ url: '/foo/1/bar', method: 'GET' }).create()
@@ -168,6 +174,7 @@ test.group('Breadcrumbs', () => {
 
     const registry = new BreadcrumbsRegistry(router)
     registry.register(route, 'Foo')
+    registry.computePatterns()
 
     const ctx = new HttpContextFactory().create()
     ctx.request = new RequestFactory().merge({ url: '/', method: 'GET' }).create()
@@ -188,6 +195,7 @@ test.group('Breadcrumbs', () => {
 
     const registry = new BreadcrumbsRegistry(router)
     registry.register(route, () => 'Foo')
+    registry.computePatterns()
 
     const ctx = new HttpContextFactory().create()
     ctx.request = new RequestFactory().merge({ url: '/', method: 'GET' }).create()
@@ -212,6 +220,7 @@ test.group('Breadcrumbs', () => {
 
       return 'Foo'
     })
+    registry.computePatterns()
 
     const ctx = new HttpContextFactory().create()
     ctx.request = new RequestFactory().merge({ url: '/', method: 'GET' }).create()
@@ -270,6 +279,8 @@ test.group('Breadcrumbs', () => {
       .title((_: HttpContext, foo: Foo, bar: Bar) => {
         return `${foo.title} - ${bar.title}`
       })
+
+    await app.start(() => {})
     await server.boot()
 
     const { body } = await supertest(httpServer).get('/foos/1/bars/5')
@@ -332,6 +343,8 @@ test.group('Breadcrumbs', () => {
       edit: ({ resources }: HttpContext) => `Edit post - ${resources.post.title}`,
       show: ({ resources }: HttpContext) => `Post - ${resources.post.title}`,
     })
+
+    await app.start(() => {})
     await server.boot()
 
     const { body } = await supertest(httpServer).get('/posts/1')

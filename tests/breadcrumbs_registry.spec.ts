@@ -2,6 +2,7 @@ import { test } from '@japa/runner'
 
 import { BreadcrumbsRegistry } from '../src/breadcrumbs_registry.js'
 import { RouterFactory } from '@adonisjs/http-server/factories'
+import { Route } from '@adonisjs/http-server'
 
 test.group('BreadcrumbsRegistry', () => {
   test('routes attribute should be an object', async ({ assert }) => {
@@ -11,7 +12,7 @@ test.group('BreadcrumbsRegistry', () => {
     assert.isObject(registry.routes)
   })
 
-  test('register method should add a GET route pattern and title as string to the routes object', async ({
+  test('register method should add a GET route instance and title as string to the routes object', async ({
     assert,
   }) => {
     const router = new RouterFactory().create()
@@ -21,8 +22,9 @@ test.group('BreadcrumbsRegistry', () => {
     const registry = new BreadcrumbsRegistry(router)
     registry.register(route, 'Foo')
 
-    assert.property(registry.routes, '/')
-    assert.typeOf(registry.routes['/'], 'string')
+    assert.instanceOf(registry.temporaryRoutes.at(0)?.at(0), Route)
+    assert.typeOf(registry.temporaryRoutes.at(0)?.at(1), 'string')
+    assert.strictEqual(registry.temporaryRoutes.at(0)?.at(1), 'Foo')
   })
 
   test('register method should add a GET route pattern and title as a closure to the routes object', async ({
@@ -35,8 +37,8 @@ test.group('BreadcrumbsRegistry', () => {
     const registry = new BreadcrumbsRegistry(router)
     registry.register(route, () => 'Foo')
 
-    assert.property(registry.routes, '/')
-    assert.typeOf(registry.routes['/'], 'function')
+    assert.instanceOf(registry.temporaryRoutes.at(0)?.at(0), Route)
+    assert.typeOf(registry.temporaryRoutes.at(0)?.at(1), 'function')
   })
 
   test('non-GET route should throw an error when trying to be registered', async ({ assert }) => {
@@ -56,6 +58,7 @@ test.group('BreadcrumbsRegistry', () => {
 
     const registry = new BreadcrumbsRegistry(router)
     registry.register(route, 'Foo')
+    registry.computePatterns()
 
     assert.isTrue(registry.has('/foo'))
   })
@@ -68,6 +71,7 @@ test.group('BreadcrumbsRegistry', () => {
     router.commit()
 
     const registry = new BreadcrumbsRegistry(router)
+    registry.computePatterns()
 
     assert.isFalse(registry.has('/foo'))
   })
@@ -79,6 +83,7 @@ test.group('BreadcrumbsRegistry', () => {
 
     const registry = new BreadcrumbsRegistry(router)
     registry.register(route, 'Foo')
+    registry.computePatterns()
 
     assert.equal(registry.getTitleByRoutePattern('/foo'), 'Foo')
   })
