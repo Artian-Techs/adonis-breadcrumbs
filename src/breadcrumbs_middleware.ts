@@ -20,14 +20,22 @@ export default class BreadcrumbsMiddleware {
       ctx.breadcrumbs = new Breadcrumbs(this.router, this.registry, ctx)
 
       /**
-       * Share breadcrumbs instance with Inertia and Edge views
+       * Share breadcrumbs instance with Edge views
        */
-      for (const module of ['view', 'inertia'] as const) {
-        if (ctx[module]) {
-          ctx[module].share({
-            breadcrumbs: ctx.breadcrumbs,
-          })
-        }
+      if (ctx.view) {
+        ctx.view.share({
+          breadcrumbs: ctx.breadcrumbs,
+        })
+      }
+
+      /**
+       * Share breadcrumbs array with Inertia.
+       * Must be serialized as we can't pass a class instance to Inertia views.
+       */
+      if (ctx.inertia) {
+        ctx.inertia.share({
+          breadcrumbs: ctx.breadcrumbs.get(),
+        })
       }
     }
 
