@@ -71,6 +71,7 @@
   "peerDependencies": {
     "@adonisjs/core": "^6.9.0",
     "@adonisjs/lucid": "^20.5.1",
+    "luxon": "^3.4.4",
     "@adonisjs/route-model-binding": "^2.0.0-0"
   },
   "eslintConfig": {
