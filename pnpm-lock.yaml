@@ -29,6 +29,9 @@ devDependencies:
   '@adonisjs/prettier-config':
     specifier: ^1.3.0
     version: 1.3.0
+  '@adonisjs/route-model-binding':
+    specifier: ^2.0.0-0
+    version: 2.0.0-0(@adonisjs/core@6.9.0)(@adonisjs/lucid@20.5.1)
   '@adonisjs/tsconfig':
     specifier: ^1.3.0
     version: 1.3.0
@@ -464,6 +467,19 @@ packages:
     dependencies:
       '@poppinss/colors': 4.1.3
       string-width: 7.1.0
+    dev: true
+
+  /@adonisjs/route-model-binding@2.0.0-0(@adonisjs/core@6.9.0)(@adonisjs/lucid@20.5.1):
+    resolution: {integrity: sha512-QF2SjoAEMF+sElCc7JyJUvd7btZZp+ChSPzDG0RBtrvHomuLi2JkRSrTfnG6op+Tw068nX9ZxCOjIk++jrPTIg==}
+    engines: {node: '>=20.11.1'}
+    peerDependencies:
+      '@adonisjs/core': ^6.9.0
+      '@adonisjs/lucid': ^20.5.1
+    dependencies:
+      '@adonisjs/core': 6.9.0(@adonisjs/assembler@7.5.0)(edge.js@6.0.2)
+      '@adonisjs/fold': 10.1.2
+      '@adonisjs/lucid': 20.5.1(@adonisjs/assembler@7.5.0)(@adonisjs/core@6.9.0)(better-sqlite3@9.6.0)(sqlite3@5.1.7)
+      '@poppinss/utils': 6.7.3
     dev: true
 
   /@adonisjs/session@7.4.0(@adonisjs/core@6.9.0)(edge.js@6.0.2):
