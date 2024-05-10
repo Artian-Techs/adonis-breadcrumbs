@@ -57,7 +57,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import { defineConfig } from '@artian-techs/adonis-breadcrumbs'
 
 export default defineConfig({
-  prefix: (ctx: HttpContext, { request }: HttpRouterService) => {
+  prefix: ({ request }: HttpContext, router: HttpRouterService) => {
     if (request.url().startsWith('/admin')) {
       return '/admin/dashboard'
     }
