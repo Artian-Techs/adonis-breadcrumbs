@@ -15,6 +15,15 @@ const guidesNav = [
     ],
   },
   {
+    text: 'Configuration',
+    items: [
+      {
+        text: 'General configuration',
+        link: '/guide/general_configuration',
+      },
+    ],
+  },
+  {
     text: 'Basic Usage',
     items: [
       {
@@ -24,6 +33,10 @@ const guidesNav = [
       {
         text: 'Dynamic titles',
         link: '/guide/dynamic_titles',
+      },
+      {
+        text: 'Brisk routes',
+        link: '/guide/brisk_routes',
       },
       {
         text: 'Resource routes',

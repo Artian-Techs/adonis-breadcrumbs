@@ -27,7 +27,7 @@ router.get('/admin/dashboard', () => {}).name('admin.dashboard')
 // start/breadcrumbs.ts
 
 import { HttpContext } from '@adonisjs/core/http'
-import Breadcrumbs from '@artian-techs/adonis-breadcrumbs/services/registry'
+import Breadcrumbs from '@artian-techs/adonis-breadcrumbs/services/main'
 
 Breadcrumbs.for('home', ({ request }, trail) => {
   trail.push('Home', '/')
@@ -90,7 +90,7 @@ router.resource('posts', PostsController)
 ```typescript
 // start/breadcrumbs.ts
 
-import Breadcrumbs from '@artian-techs/adonis-breadcrumbs/services/registry'
+import Breadcrumbs from '@artian-techs/adonis-breadcrumbs/services/main'
 
 Breadcrumbs.for('posts.index', (ctx, trail) => {
   trail.push('All posts', '/posts')

@@ -32,53 +32,10 @@ See steps performed by the add command
    router.use([() => import('@artian-techs/adonis-breadcrumbs/breadcrumbs_middleware')])
    ```
 
-</details>
-
-Alternatively, you can install it manually using your favorite package manager and running the configure command:
-::: code-group
-
-```sh [npm]
-npm install @artian-techs/adonis-breadcrumbs
-node ace configure @artian-techs/adonis-breadcrumbs
-```
-
-```sh [pnpm]
-pnpm install @artian-techs/adonis-breadcrumbs
-node ace configure @artian-techs/adonis-breadcrumbs
-```
-
-```sh [yarn]
-yarn add @artian-techs/adonis-breadcrumbs
-node ace configure @artian-techs/adonis-breadcrumbs
-```
-
-:::
-
-<details>
-
-<summary>
-See steps performed by the configure command
-</summary>
-
-1. Registers the following service provider inside the `adonisrc.ts` file.
-
-```ts
-{
-  providers: [
-    // ...other providers
-    () => import('@artian-techs/adonis-breadcrumbs/breadcrumbs_provider'),
-  ]
-}
-```
-
-2. register the following middleware inside the `start/kernel.ts` file.
-
-```ts
-router.use([() => import('@artian-techs/adonis-breadcrumbs/breadcrumbs_middleware')])
-```
-
+4. Create the `config/breadcrumbs.ts` file.
 </details>
 
 ::: tip
-Once the middleware and either Edge or Inertia are registered, views/templates will have access to the same breadcrumbs instance as in the HTTP context.
+Once the middleware and either Edge views will have access to the same breadcrumbs instance as in the HTTP context.
+Inertia views will only have access to the array of the breadcrumbs of the current route. This is because we can't pass an instance to Inertia, as everything is serialized.
 :::
