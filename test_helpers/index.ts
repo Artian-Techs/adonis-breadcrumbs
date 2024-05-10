@@ -8,7 +8,7 @@ import { defineConfig } from '@adonisjs/lucid'
 const BASE_URL = new URL('./tmp', import.meta.url)
 const BASE_PATH = fileURLToPath(BASE_URL)
 
-export async function setupApp() {
+export async function setupApp(configs?: Record<string, any>) {
   const ignitor = new IgnitorFactory()
     .withCoreProviders()
     .withCoreConfig()
@@ -32,6 +32,7 @@ export async function setupApp() {
             },
           },
         }),
+        ...configs,
       },
     })
     .create(BASE_URL, {

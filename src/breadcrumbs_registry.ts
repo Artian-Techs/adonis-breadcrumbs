@@ -1,4 +1,5 @@
 import type { HttpRouterService } from '@adonisjs/core/types'
+import type { BreadcrumbsConfig } from './define_config.js'
 import type { Title } from './types.js'
 
 import { BreadcrumbsTrail } from './breadcrumbs_trail.js'
@@ -6,7 +7,15 @@ import { HttpContext, Route } from '@adonisjs/core/http'
 import { RouteJSON } from '@adonisjs/http-server/types'
 
 export class BreadcrumbsRegistry {
+  /**
+   * AdonisJS router instance
+   */
   #router: HttpRouterService
+
+  /**
+   * Breadcrumbs config
+   */
+  #config: BreadcrumbsConfig
 
   /**
    * Routes registry. Keys are patterns and values are title strings/callbacks
@@ -25,7 +34,8 @@ export class BreadcrumbsRegistry {
     (ctx: HttpContext, trail: BreadcrumbsTrail, ...args: any[]) => void
   > = {}
 
-  constructor(router: HttpRouterService) {
+  constructor(config: BreadcrumbsConfig, router: HttpRouterService) {
+    this.#config = config
     this.#router = router
   }
 
@@ -39,6 +49,10 @@ export class BreadcrumbsRegistry {
 
   get temporaryRoutes() {
     return this.#tmp
+  }
+
+  get prefix() {
+    return this.#config.prefix
   }
 
   /**

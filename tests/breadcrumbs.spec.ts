@@ -1,8 +1,9 @@
+import type { NextFn } from '@adonisjs/http-server/types'
+
 import { createServer } from 'node:http'
 import supertest from 'supertest'
 import { test } from '@japa/runner'
-import { NextFn } from '@adonisjs/http-server/types'
-import { HttpContext } from '@adonisjs/core/http'
+import { HttpContext, type Route } from '@adonisjs/core/http'
 import { RouterFactory, HttpContextFactory, RequestFactory } from '@adonisjs/http-server/factories'
 
 import { BreadcrumbsRegistry } from '../src/breadcrumbs_registry.js'
@@ -16,7 +17,7 @@ test.group('Breadcrumbs', () => {
     const route = router.get('/', async () => {})
     router.commit()
 
-    const registry = new BreadcrumbsRegistry(router)
+    const registry = new BreadcrumbsRegistry({}, router)
     registry.register(route, 'Foo')
     registry.computePatterns()
 
@@ -36,7 +37,7 @@ test.group('Breadcrumbs', () => {
     const route = router.get('/', async () => {})
     router.commit()
 
-    const registry = new BreadcrumbsRegistry(router)
+    const registry = new BreadcrumbsRegistry({}, router)
     registry.register(route, 'Foo')
     registry.computePatterns()
 
@@ -62,7 +63,7 @@ test.group('Breadcrumbs', () => {
     const route2 = router.get('/foo/:foo', async () => {})
     router.commit()
 
-    const registry = new BreadcrumbsRegistry(router)
+    const registry = new BreadcrumbsRegistry({}, router)
     registry.register(route1, 'Foo')
     registry.register(route2, 'Foo 1')
     registry.computePatterns()
@@ -89,7 +90,7 @@ test.group('Breadcrumbs', () => {
     const route3 = router.get('/foo/:foo/bar', async () => {})
     router.commit()
 
-    const registry = new BreadcrumbsRegistry(router)
+    const registry = new BreadcrumbsRegistry({}, router)
     registry.register(route1, 'Foo')
     registry.register(route2, 'Foo 1')
     registry.register(route3, 'Foo 1 Bar')
@@ -121,7 +122,7 @@ test.group('Breadcrumbs', () => {
     const route3 = router.get('/foo/:foo/bar', async () => {}).as('foos.foo.bar')
     router.commit()
 
-    const registry = new BreadcrumbsRegistry(router)
+    const registry = new BreadcrumbsRegistry({}, router)
     registry.register(route1, 'Foo')
     registry.register(route2, 'Foo 1')
     registry.register(route3, 'Foo 1 Bar')
@@ -149,7 +150,7 @@ test.group('Breadcrumbs', () => {
     const route3 = router.get('/foo/:foo/bar', async () => {}).as('foos.foo.bar')
     router.commit()
 
-    const registry = new BreadcrumbsRegistry(router)
+    const registry = new BreadcrumbsRegistry({}, router)
     registry.register(route1, 'Foo')
     registry.register(route2, 'Foo 1')
     registry.register(route3, 'Foo 1 Bar')
@@ -172,7 +173,7 @@ test.group('Breadcrumbs', () => {
     const route = router.get('/', async () => {})
     router.commit()
 
-    const registry = new BreadcrumbsRegistry(router)
+    const registry = new BreadcrumbsRegistry({}, router)
     registry.register(route, 'Foo')
     registry.computePatterns()
 
@@ -193,7 +194,7 @@ test.group('Breadcrumbs', () => {
     const route = router.get('/', async () => {})
     router.commit()
 
-    const registry = new BreadcrumbsRegistry(router)
+    const registry = new BreadcrumbsRegistry({}, router)
     registry.register(route, () => 'Foo')
     registry.computePatterns()
 
@@ -214,7 +215,7 @@ test.group('Breadcrumbs', () => {
     const route = router.get('/', async () => {})
     router.commit()
 
-    const registry = new BreadcrumbsRegistry(router)
+    const registry = new BreadcrumbsRegistry({}, router)
     registry.register(route, (ctx) => {
       assert.instanceOf(ctx, HttpContext)
 
@@ -232,7 +233,7 @@ test.group('Breadcrumbs', () => {
   test('HttpContext | breadcrumbs.get should return the breadcrumbs for the current route', async ({
     assert,
   }) => {
-    const app = await setupApp()
+    const app = await setupApp({ breadcrumbs: {} })
     const router = await app.container.make('router')
     const server = await app.container.make('server')
     const httpServer = createServer(server.handle.bind(server))
@@ -303,7 +304,7 @@ test.group('Breadcrumbs', () => {
   test('HttpContext | breadcrumbs.get should return the breadcrumbs for the current resource route', async ({
     assert,
   }) => {
-    const app = await setupApp()
+    const app = await setupApp({ breadcrumbs: {} })
     const router = await app.container.make('router')
     const server = await app.container.make('server')
     const httpServer = createServer(server.handle.bind(server))
@@ -352,5 +353,151 @@ test.group('Breadcrumbs', () => {
       { title: 'All posts', url: '/posts', name: 'posts.index' },
       { title: 'Post - Foo', url: '/posts/1', name: 'posts.show' },
     ])
+  })
+
+  test('prefix added in config as a string should be the first breadcrumb item in the array', async ({
+    assert,
+  }) => {
+    const router = new RouterFactory().create()
+    const routesGroup = router
+      .group(() => {
+        router.get('/dashboard', async () => {})
+        router.get('/users', async () => {})
+      })
+      .prefix('/backoffice')
+    const dashboard = routesGroup.routes.at(0)! as Route
+    const users = routesGroup.routes.at(1)! as Route
+    router.commit()
+
+    const registry = new BreadcrumbsRegistry(
+      {
+        prefix: '/backoffice/dashboard',
+      },
+      router
+    )
+    registry.register(dashboard, 'Dashboard')
+    registry.register(users, 'Users')
+    registry.computePatterns()
+
+    const ctx = new HttpContextFactory().create()
+    ctx.request = new RequestFactory().merge({ url: '/backoffice/users', method: 'GET' }).create()
+    ctx.route = router.match(ctx.request.url(), ctx.request.method())!.route
+
+    const breadcrumbs = new Breadcrumbs(router, registry, ctx)
+    const breadcrumbItems = breadcrumbs.get()
+
+    assert.strictEqual(breadcrumbItems.at(0)!.title, 'Dashboard')
+    assert.strictEqual(breadcrumbItems.at(0)!.url, '/backoffice/dashboard')
+  })
+
+  test('prefix added in config as an object should be the first breadcrumb item in the array', async ({
+    assert,
+  }) => {
+    const router = new RouterFactory().create()
+    const routesGroup = router
+      .group(() => {
+        router.get('/dashboard', async () => {})
+        router.get('/users', async () => {})
+      })
+      .prefix('/backoffice')
+    const dashboard = routesGroup.routes.at(0)! as Route
+    const users = routesGroup.routes.at(1)! as Route
+    router.commit()
+
+    const registry = new BreadcrumbsRegistry(
+      {
+        prefix: {
+          title: 'Dashboard',
+          url: '/backoffice/dashboard',
+        },
+      },
+      router
+    )
+    registry.register(dashboard, 'Dashboard')
+    registry.register(users, 'Users')
+    registry.computePatterns()
+
+    const ctx = new HttpContextFactory().create()
+    ctx.request = new RequestFactory().merge({ url: '/backoffice/users', method: 'GET' }).create()
+    ctx.route = router.match(ctx.request.url(), ctx.request.method())!.route
+
+    const breadcrumbs = new Breadcrumbs(router, registry, ctx)
+    const breadcrumbItems = breadcrumbs.get()
+
+    assert.strictEqual(breadcrumbItems.at(0)!.title, 'Dashboard')
+    assert.strictEqual(breadcrumbItems.at(0)!.url, '/backoffice/dashboard')
+  })
+
+  test('prefix added in config as a callback that returns a string should be the first breadcrumb item in the array', async ({
+    assert,
+  }) => {
+    const router = new RouterFactory().create()
+    const routesGroup = router
+      .group(() => {
+        router.get('/dashboard', async () => {})
+        router.get('/users', async () => {})
+      })
+      .prefix('/backoffice')
+    const dashboard = routesGroup.routes.at(0)! as Route
+    const users = routesGroup.routes.at(1)! as Route
+    router.commit()
+
+    const registry = new BreadcrumbsRegistry(
+      {
+        prefix: (_, __) => '/backoffice/dashboard',
+      },
+      router
+    )
+    registry.register(dashboard, 'Dashboard')
+    registry.register(users, 'Users')
+    registry.computePatterns()
+
+    const ctx = new HttpContextFactory().create()
+    ctx.request = new RequestFactory().merge({ url: '/backoffice/users', method: 'GET' }).create()
+    ctx.route = router.match(ctx.request.url(), ctx.request.method())!.route
+
+    const breadcrumbs = new Breadcrumbs(router, registry, ctx)
+    const breadcrumbItems = breadcrumbs.get()
+
+    assert.strictEqual(breadcrumbItems.at(0)!.title, 'Dashboard')
+    assert.strictEqual(breadcrumbItems.at(0)!.url, '/backoffice/dashboard')
+  })
+
+  test('prefix added in config as a callback that returns an object should be the first breadcrumb item in the array', async ({
+    assert,
+  }) => {
+    const router = new RouterFactory().create()
+    const routesGroup = router
+      .group(() => {
+        router.get('/dashboard', async () => {})
+        router.get('/users', async () => {})
+      })
+      .prefix('/backoffice')
+    const dashboard = routesGroup.routes.at(0)! as Route
+    const users = routesGroup.routes.at(1)! as Route
+    router.commit()
+
+    const registry = new BreadcrumbsRegistry(
+      {
+        prefix: (_, __) => ({
+          title: 'Dashboard',
+          url: '/backoffice/dashboard',
+        }),
+      },
+      router
+    )
+    registry.register(dashboard, 'Dashboard')
+    registry.register(users, 'Users')
+    registry.computePatterns()
+
+    const ctx = new HttpContextFactory().create()
+    ctx.request = new RequestFactory().merge({ url: '/backoffice/users', method: 'GET' }).create()
+    ctx.route = router.match(ctx.request.url(), ctx.request.method())!.route
+
+    const breadcrumbs = new Breadcrumbs(router, registry, ctx)
+    const breadcrumbItems = breadcrumbs.get()
+
+    assert.strictEqual(breadcrumbItems.at(0)!.title, 'Dashboard')
+    assert.strictEqual(breadcrumbItems.at(0)!.url, '/backoffice/dashboard')
   })
 })

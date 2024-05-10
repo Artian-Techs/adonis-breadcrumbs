@@ -62,7 +62,7 @@ test.group('Breadcrumbs - Route Model Binding', () => {
 
     await Post.create({ title: 'Post 1', slug: 'post-1' })
 
-    const registry = new BreadcrumbsRegistry(router)
+    const registry = new BreadcrumbsRegistry({}, router)
     registry.register(route, (_: HttpContext, post: Post) => post.title)
     registry.computePatterns()
 
@@ -136,7 +136,7 @@ test.group('Breadcrumbs - Route Model Binding', () => {
       await post.related('comments').create({ slug: 'comment-1', body: 'Comment 1' })
     })
 
-    const registry = new BreadcrumbsRegistry(router)
+    const registry = new BreadcrumbsRegistry({}, router)
     registry.register(
       route,
       (_: HttpContext, post: Post, comment: Comment) => `${post.title} - Comment ${comment.id}`
@@ -215,7 +215,7 @@ test.group('Breadcrumbs - Route Model Binding', () => {
 
     await Post.create({ title: 'Post 1', slug: 'post-1' })
 
-    const registry = new BreadcrumbsRegistry(router)
+    const registry = new BreadcrumbsRegistry({}, router)
     registry.register(route, (_: HttpContext, post: Post) => post.title)
     registry.computePatterns()
 

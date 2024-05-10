@@ -52,6 +52,7 @@
     "@japa/assert": "^3.0.0",
     "@japa/plugin-adonisjs": "^3.0.1",
     "@japa/runner": "^3.1.2",
+    "@poppinss/utils": "^6.7.3",
     "@swc/core": "^1.4.14",
     "@types/node": "^20.12.7",
     "@types/supertest": "^6.0.2",
@@ -71,8 +72,8 @@
   "peerDependencies": {
     "@adonisjs/core": "^6.9.0",
     "@adonisjs/lucid": "^20.5.1",
-    "luxon": "^3.4.4",
-    "@adonisjs/route-model-binding": "^2.0.0-0"
+    "@adonisjs/route-model-binding": "^2.0.0-0",
+    "luxon": "^3.4.4"
   },
   "eslintConfig": {
     "extends": "@adonisjs/eslint-config/app"

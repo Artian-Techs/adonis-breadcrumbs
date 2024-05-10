@@ -1,4 +1,5 @@
 import type { ApplicationService } from '@adonisjs/core/types'
+import type { BreadcrumbsConfig } from '../src/define_config.js'
 import type { RouteTitle, Title } from '../src/types.js'
 import type { Breadcrumbs } from '../src/breadcrumbs.js'
 
@@ -29,7 +30,10 @@ export default class BreadcrumbsProvider {
 
   register() {
     this.app.container.singleton('breadcrumbs.registry', async () => {
-      return new BreadcrumbsRegistry(await this.app.container.make('router'))
+      const breadcrumbsConfig = this.app.config.get<BreadcrumbsConfig>('breadcrumbs')
+      const router = await this.app.container.make('router')
+
+      return new BreadcrumbsRegistry(breadcrumbsConfig, router)
     })
 
     this.app.container.singleton(BreadcrumbsMiddleware, async () => {

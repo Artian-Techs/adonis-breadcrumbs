@@ -9,7 +9,7 @@ test.group('BreadcrumbsTrail', () => {
   test('items attribute should be an array', async ({ assert }) => {
     const router = new RouterFactory().create()
     const ctx = new HttpContextFactory().create()
-    const registry = new BreadcrumbsRegistry(router)
+    const registry = new BreadcrumbsRegistry({}, router)
 
     const trail = new BreadcrumbsTrail(registry, router, ctx, [])
     assert.isArray(trail.items)
@@ -18,7 +18,7 @@ test.group('BreadcrumbsTrail', () => {
   test('push method should add breadcrumb items to the trail', async ({ assert }) => {
     const router = new RouterFactory().create()
     const ctx = new HttpContextFactory().create()
-    const registry = new BreadcrumbsRegistry(router)
+    const registry = new BreadcrumbsRegistry({}, router)
 
     const trail = new BreadcrumbsTrail(registry, router, ctx, [])
     trail.push('Foos', '/foos', 'foos.index')
@@ -41,7 +41,7 @@ test.group('BreadcrumbsTrail', () => {
     const ctx = new HttpContextFactory().create()
     ctx.route = router.match('/foos', 'GET')!.route
 
-    const registry = new BreadcrumbsRegistry(router)
+    const registry = new BreadcrumbsRegistry({}, router)
     registry.for('home', (_, trail) => {
       trail.push('Home', '/', 'home')
     })
