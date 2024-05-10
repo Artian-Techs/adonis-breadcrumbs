@@ -9,7 +9,7 @@ export type BreadcrumbsConfig = {
   prefix?:
     | string
     | BreadcrumbItem
-    | ((ctx: HttpContext, router: HttpRouterService) => string | BreadcrumbItem)
+    | ((ctx: HttpContext, router: HttpRouterService) => string | BreadcrumbItem | undefined)
     | null
 }
 
