@@ -11,22 +11,24 @@
     "build",
     "!build/bin",
     "!build/tests",
-    "!build/tests_helpers"
+    "!build/test_helpers"
   ],
   "exports": {
     ".": "./build/index.js",
     "./breadcrumbs_provider": "./build/providers/breadcrumbs_provider.js",
     "./breadcrumbs_middleware": "./build/src/breadcrumbs_middleware.js",
-    "./services/registry": "./build/services/breadcrumbs_registry.js",
+    "./services/main": "./build/services/breadcrumbs_registry.js",
     "./types": "./build/src/types.js"
   },
   "scripts": {
     "build": "npm run compile",
     "clean": "del-cli build",
+    "copy:templates": "copyfiles \"stubs/**/**/*.stub\" build",
     "compile": "npm run clean && tsc",
     "format": "prettier --write .",
     "lint": "eslint . --ext=.ts",
     "precompile": "npm run lint",
+    "postcompile": "npm run copy:templates",
     "prepublishOnly": "npm run build",
     "pretest": "npm run lint",
     "quick:test": "node --enable-source-maps --loader=ts-node/esm bin/test.ts",
@@ -58,6 +60,7 @@
     "@types/supertest": "^6.0.2",
     "better-sqlite3": "^9.6.0",
     "c8": "^9.1.0",
+    "copyfiles": "^2.4.1",
     "del-cli": "^5.1.0",
     "eslint": "^8.57.0",
     "pino-pretty": "^11.0.0",
