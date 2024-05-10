@@ -36,6 +36,9 @@ See steps performed by the add command
 </details>
 
 ::: tip
-Once the middleware and either Edge views will have access to the same breadcrumbs instance as in the HTTP context.
-Inertia views will only have access to the array of the breadcrumbs of the current route. This is because we can't pass an instance to Inertia, as everything is serialized.
+Once the middleware is registered:
+
+- Edge views will have access to the same breadcrumbs instance as in the HTTP context.
+- Inertia views will only have access to the array of the breadcrumbs of the current route. This is because we can't pass an instance to Inertia, as everything is serialized.
+
 :::
