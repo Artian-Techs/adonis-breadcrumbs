@@ -1,4 +1,5 @@
-import type { HttpContext, Router } from '@adonisjs/core/http'
+import type { HttpRouterService } from '@adonisjs/core/types'
+import type { HttpContext } from '@adonisjs/core/http'
 import type { BreadcrumbItem } from './types.js'
 
 /**
@@ -8,7 +9,7 @@ export type BreadcrumbsConfig = {
   prefix?:
     | string
     | BreadcrumbItem
-    | ((ctx: HttpContext, router: Router) => string | BreadcrumbItem)
+    | ((ctx: HttpContext, router: HttpRouterService) => string | BreadcrumbItem)
     | null
 }
 
