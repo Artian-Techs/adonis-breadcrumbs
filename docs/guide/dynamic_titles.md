@@ -86,7 +86,7 @@ router
   .title((ctx: HttpContext, user: User, order: Order) => `Order - ${order.id}`)
 ```
 
-::: tip
+::: info
 The title's callback of the route `/admin/dashboard/users/:user` will receive the same `User` instance as `/admin/dashboard/users/:user/orders/:order`.
 :::
 

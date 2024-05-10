@@ -11,7 +11,7 @@ router.get('/', () => {}).title('Home')
 router.get('/admin/dashboard', () => {}).title('Admin dashboard')
 ```
 
-::: tip
+::: info
 The `title` method accepts also a callback as the only argument. This callback always has the current route HTTP context as the first argument, just like controller methods.
 :::
 
@@ -68,31 +68,31 @@ The same array can be generated in Edge and/or Inertia views.
 
 ```vue [Vue]
 <script setup lang="ts">
-import type { Breadcrumbs } from '@artian-techs/breadcrumbs/types'
+import type { BreadcrumbItem } from '@artian-techs/breadcrumbs/types'
 
 defineProps<{
   // ... other props
-  breadcrumbs: Breadcrumbs
+  breadcrumbs: BreadcrumbItem[]
 }>()
 </script>
 
 <template>
   <ol>
-    <li v-for="(breadcrumb, index) in breadcrumbs.get()" :key="index">
+    <li v-for="(breadcrumb, index) in breadcrumbs" :key="index">
       <span>
         <a href="{{ breadcrumb.url }}">{{ breadcrumb.title }}</a>
       </span>
 
-      <span v-if="index < breadcrumbs.get() - 1">/</span>
+      <span v-if="index < breadcrumbs.length - 1">/</span>
     </li>
   </ol>
 </template>
 ```
 
 ```tsx [TSX]
-import type { Breadcrumbs } from '@artian-techs/breadcrumbs/types'
+import type { BreadcrumbItem } from '@artian-techs/breadcrumbs/types'
 
-export default function Home(props: { breadcrumbs: Breadcrumbs }) {
+export default function Home(props: { breadcrumbs: BreadcrumbItem[] }) {
   return (
     <ol>
       {breadcrumbs.map((breadcrumb, index) => (
@@ -111,18 +111,18 @@ export default function Home(props: { breadcrumbs: Breadcrumbs }) {
 
 ```svelte [Svelte]
 <script>
-  import type { Breadcrumbs } from '@artian-techs/breadcrumbs/types'
+  import type { BreadcrumbItem } from '@artian-techs/breadcrumbs/types'
 
-  export let breadcrumbs: Breadcrumbs;
+  export let breadcrumbs: BreadcrumbItem[];
 </script>
 
 <ol>
-  {#each breadcrumbs.get() as breadcrumb, index}
+  {#each breadcrumbs as breadcrumb, index}
     <li>
       <span>
         <a href={breadcrumb.url}>{breadcrumb.title}</a>
       </span>
-      {#if index < breadcrumbs.get().length - 1}
+      {#if index < breadcrumbs.length - 1}
         <span>/</span>
       {/if}
     </li>

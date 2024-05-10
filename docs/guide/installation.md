@@ -7,11 +7,7 @@ You can install it using the following ace command to automagically configure it
 node ace add @artian-techs/adonis-breadcrumbs
 ```
 
-<details>
-
-<summary>
-See steps performed by the add command
-</summary>
+::: details See steps performed by the add command
 
 1. Installs the `@artian-techs/adonis-breadcrumbs` package using the detected package manager.
 
@@ -33,9 +29,10 @@ See steps performed by the add command
    ```
 
 4. Create the `config/breadcrumbs.ts` file.
-</details>
 
-::: tip
+:::
+
+::: info
 Once the middleware is registered:
 
 - Edge views will have access to the same breadcrumbs instance as in the HTTP context.
