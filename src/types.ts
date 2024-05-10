@@ -6,11 +6,10 @@ export type Title = string | ((ctx: HttpContext, ...args: any[]) => string)
 
 export type RouteTitle<T> = (title: Title) => T
 
-export type BreadcrumbItem = {
+export interface BreadcrumbItem {
   url: string
   title: string
   name?: string
-  parent?: BreadcrumbItem
 }
 
 export type Breadcrumbs = BreadcrumbsType
