@@ -19,8 +19,10 @@ The following example will return the text for `home` property in your lang file
 ```ts
 import router from '@adonisjs/core/services/router'
 
+const HomeController = () => import('#controllers/home_controller')
+
 router
-  .get('/', () => {})
+  .get('/', () => [HomeController])
   .title(({ i18n }: HttpContext) => {
     return i18n.t('home')
   })
@@ -32,13 +34,9 @@ To generate breadcrumbs for the current route, you must access the `breadcrumbs`
 
 ```typescript
 import { HttpContext } from '@adonisjs/core/http'
-import { bind } from '@adonisjs/route-model-binding'
 
-import Order from '#models/order'
-
-export default class OrdersController {
-  @bind()
-  async show({ breadcrumbs }: HttpContext, user: Order) {
+export default class HomeController {
+  async handle({ breadcrumbs }: HttpContext) {
     return breadcrumbs.get()
   }
 }
@@ -48,7 +46,7 @@ The `https://your-site.com/` url should return an array containing the breadcrum
 
 ```json
 [
-  { "url": "/", "title": "Home", "name": undefined } // Only if "Home" is actually defined in my lang file
+  { "url": "/", "title": "Home", "name": undefined } // Only if "Home" is actually defined in a lang file
 ]
 ```
 
