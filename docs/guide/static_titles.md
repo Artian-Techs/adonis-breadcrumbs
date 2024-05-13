@@ -68,7 +68,7 @@ The same array can be generated in Edge and/or Inertia views.
 
 ```vue [Vue]
 <script setup lang="ts">
-import type { BreadcrumbItem } from '@artian-techs/breadcrumbs/types'
+import type { BreadcrumbItem } from '@artian-techs/adonis-breadcrumbs/types'
 
 defineProps<{
   // ... other props
@@ -90,7 +90,7 @@ defineProps<{
 ```
 
 ```tsx [TSX]
-import type { BreadcrumbItem } from '@artian-techs/breadcrumbs/types'
+import type { BreadcrumbItem } from '@artian-techs/adonis-breadcrumbs/types'
 
 export default function Home(props: { breadcrumbs: BreadcrumbItem[] }) {
   return (
@@ -111,7 +111,7 @@ export default function Home(props: { breadcrumbs: BreadcrumbItem[] }) {
 
 ```svelte [Svelte]
 <script>
-  import type { BreadcrumbItem } from '@artian-techs/breadcrumbs/types'
+  import type { BreadcrumbItem } from '@artian-techs/adonis-breadcrumbs/types'
 
   export let breadcrumbs: BreadcrumbItem[];
 </script>
