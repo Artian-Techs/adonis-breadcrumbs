@@ -92,7 +92,7 @@ export class Breadcrumbs {
           const route = this.#router.match(prefix, 'GET')?.route
 
           if (route) {
-            const title = this.#registry.getTitleByRoutePattern(route.pattern)
+            const { title } = this.#registry.getRouteDataByPattern(route.pattern)
 
             if (!title) {
               throw new Error(
@@ -148,13 +148,13 @@ export class Breadcrumbs {
     const urlFragments = this.#getFragments(this.#url)
 
     for (const [i, fragment] of patternFragments.entries()) {
-      const title = this.#registry.getTitleByRoutePattern(fragment)
+      const { title, domain } = this.#registry.getRouteDataByPattern(fragment)
 
       if (title) {
         this.#trail.push(
           this.#resolveTitle(title),
           urlFragments[i],
-          this.#router.findOrFail(fragment).name
+          this.#router.findOrFail(fragment, domain).name
         )
       }
     }

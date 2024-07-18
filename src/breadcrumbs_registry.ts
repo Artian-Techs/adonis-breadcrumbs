@@ -6,6 +6,11 @@ import { BreadcrumbsTrail } from './breadcrumbs_trail.js'
 import { HttpContext, Route } from '@adonisjs/core/http'
 import { RouteJSON } from '@adonisjs/http-server/types'
 
+type RouteData = {
+  title: Title
+  domain?: string
+}
+
 export class BreadcrumbsRegistry {
   /**
    * AdonisJS router instance
@@ -20,7 +25,7 @@ export class BreadcrumbsRegistry {
   /**
    * Routes registry. Keys are patterns and values are title strings/callbacks
    */
-  #routes: Record<string, Title> = {}
+  #routes: Record<string, RouteData> = {}
 
   /**
    * Temporary storage for route instances and titles/callbacks.
@@ -60,10 +65,13 @@ export class BreadcrumbsRegistry {
    */
   computePatterns() {
     for (const [route, title] of this.#tmp) {
-      const pattern = route.toJSON().pattern
+      const { pattern, domain } = route.toJSON()
 
       if (!this.#routes[pattern]) {
-        this.#routes[pattern] = title
+        this.#routes[pattern] = {
+          title,
+          domain,
+        }
       }
     }
   }
@@ -102,12 +110,12 @@ export class BreadcrumbsRegistry {
     return this
   }
 
-  getTitleByRoutePattern(pattern: string) {
+  getRouteDataByPattern(pattern: string) {
     if (!pattern.startsWith('/')) {
       pattern = `/${pattern}`
     }
 
-    return this.#routes[pattern]
+    return this.#routes[pattern] ?? {}
   }
 
   /**

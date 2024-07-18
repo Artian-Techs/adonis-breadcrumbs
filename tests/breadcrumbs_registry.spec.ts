@@ -76,7 +76,7 @@ test.group('BreadcrumbsRegistry', () => {
     assert.isFalse(registry.has('/foo'))
   })
 
-  test('getTitleByRoutePattern method should return a route by its pattern', async ({ assert }) => {
+  test('getRouteDataByPattern method should return a route by its pattern', async ({ assert }) => {
     const router = new RouterFactory().create()
     const route = router.get('/foo', async () => {})
     router.commit()
@@ -85,7 +85,7 @@ test.group('BreadcrumbsRegistry', () => {
     registry.register(route, 'Foo')
     registry.computePatterns()
 
-    assert.equal(registry.getTitleByRoutePattern('/foo'), 'Foo')
+    assert.equal(registry.getRouteDataByPattern('/foo').title, 'Foo')
   })
 
   test('for method should register a named route to the registry', async ({ assert }) => {

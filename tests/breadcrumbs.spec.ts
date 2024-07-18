@@ -55,6 +55,31 @@ test.group('Breadcrumbs', () => {
     assert.equal(firstItem.url, '/')
   })
 
+  test('get method should return the information of the current route breadcrumbs when a custom domain is used', async ({
+    assert,
+  }) => {
+    const router = new RouterFactory().create()
+    const route = router.get('/', async () => {}).domain('example.com')
+    router.commit()
+
+    const registry = new BreadcrumbsRegistry({}, router)
+    registry.register(route, 'Foo')
+    registry.computePatterns()
+
+    const ctx = new HttpContextFactory().create()
+    ctx.request = new RequestFactory().merge({ url: '/', method: 'GET' }).create()
+    ctx.route = router.match(ctx.request.url(), ctx.request.method(), 'example.com')!.route
+
+    const breadcrumbs = new Breadcrumbs(router, registry, ctx)
+    const items = breadcrumbs.get()
+    const firstItem = items.at(0)!
+
+    assert.property(firstItem, 'title')
+    assert.property(firstItem, 'url')
+    assert.equal(firstItem.title, 'Foo')
+    assert.equal(firstItem.url, '/')
+  })
+
   test('get method should return the information of the current route and its parent breadcrumbs', async ({
     assert,
   }) => {
