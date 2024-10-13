@@ -58,12 +58,12 @@
   },
   "devDependencies": {
     "@adonisjs/application": "^8.2.2",
-    "@adonisjs/assembler": "^7.4.0",
-    "@adonisjs/core": "^6.9.0",
+    "@adonisjs/assembler": "^7.8.2",
+    "@adonisjs/core": "^6.14.1",
     "@adonisjs/eslint-config": "^1.3.0",
     "@adonisjs/http-server": "^7.2.2",
     "@adonisjs/inertia": "1.0.0-26",
-    "@adonisjs/lucid": "^20.5.1",
+    "@adonisjs/lucid": "^21.3.0",
     "@adonisjs/prettier-config": "^1.3.0",
     "@adonisjs/route-model-binding": "^2.0.0-0",
     "@adonisjs/tsconfig": "^1.3.0",
@@ -89,8 +89,8 @@
     "vitepress": "^1.1.4"
   },
   "peerDependencies": {
-    "@adonisjs/core": "^6.9.0",
-    "@adonisjs/lucid": "^20.5.1",
+    "@adonisjs/core": "^6.13.0",
+    "@adonisjs/lucid": "^21.3.1",
     "@adonisjs/route-model-binding": "^2.0.0-0",
     "luxon": "^3.4.4"
   },
