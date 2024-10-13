@@ -16,7 +16,7 @@
     "ui",
     "seo"
   ],
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publishConfig": {
     "access": "public",
     "tag": "latest"
@@ -57,11 +57,11 @@
     "docs:preview": "vitepress preview docs"
   },
   "devDependencies": {
-    "@adonisjs/application": "^8.2.2",
+    "@adonisjs/application": "^8.3.1",
     "@adonisjs/assembler": "^7.8.2",
     "@adonisjs/core": "^6.14.1",
     "@adonisjs/eslint-config": "^1.3.0",
-    "@adonisjs/http-server": "^7.2.2",
+    "@adonisjs/http-server": "^7.2.5",
     "@adonisjs/inertia": "1.0.0-26",
     "@adonisjs/lucid": "^21.3.0",
     "@adonisjs/prettier-config": "^1.3.0",
