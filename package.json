@@ -90,7 +90,7 @@
   },
   "peerDependencies": {
     "@adonisjs/core": "^6.13.0",
-    "@adonisjs/lucid": "^21.3.1",
+    "@adonisjs/lucid": "^21.3.0",
     "@adonisjs/route-model-binding": "^2.0.0-0",
     "luxon": "^3.4.4"
   },
