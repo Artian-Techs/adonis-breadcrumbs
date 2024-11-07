@@ -64,7 +64,8 @@ export class BreadcrumbsRegistry {
    * Register routes with their final patterns
    */
   computePatterns() {
-    for (const [route, title] of this.#tmp) {
+    while (this.#tmp.length > 0) {
+      const [route, title] = this.#tmp.shift()!
       const { pattern, domain } = route.toJSON()
 
       if (!this.#routes[pattern]) {
