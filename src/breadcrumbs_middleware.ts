@@ -1,5 +1,4 @@
 /// <reference types="@adonisjs/core/providers/edge_provider" />
-/// <reference types="@adonisjs/inertia/inertia_middleware" />
 
 import type { NextFn } from '@adonisjs/core/types/http'
 import type { HttpRouterService } from '@adonisjs/core/types'
@@ -25,16 +24,6 @@ export default class BreadcrumbsMiddleware {
       if (ctx.view) {
         ctx.view.share({
           breadcrumbs: ctx.breadcrumbs,
-        })
-      }
-
-      /**
-       * Share breadcrumbs array with Inertia.
-       * Must be serialized as we can't pass a class instance to Inertia views.
-       */
-      if (ctx.inertia) {
-        ctx.inertia.share({
-          breadcrumbs: ctx.breadcrumbs.get(),
         })
       }
     }
