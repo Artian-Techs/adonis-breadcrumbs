@@ -10,9 +10,9 @@ When a route has one parent or more, bear in mind that the HTTP context of the c
 
 ### Without route model bindings
 
-As mentioned before, the `title` method also accepts a callback as argument. This callback always has the current route HTTP context as first argument.
+#### Using a callback
 
-#### Basic example
+As mentioned before, the `title` method also accepts a callback as argument. This callback always has the current route HTTP context as first argument.
 
 The following example will return the text for `home` property in your lang files based on the detected locale.
 
@@ -28,9 +28,23 @@ router
   })
 ```
 
+#### Using a callback
+
+If you need more control, you can use `add` method from a controller.
+
+```ts
+import type { HttpContext } from '@adonisjs/core/http'
+
+export default class HomeController {
+  async show({ request, breadcrumbs }: HttpContext) {
+    breadcrumbs.add('Foo', request.url())
+  }
+}
+```
+
 #### Get breadcrumbs
 
-To generate breadcrumbs for the current route, you must access the `breadcrumbs` property within the HTTP context and call the `get` method.
+To generate breadcrumbs for the current route, you must access the `breadcrumbs` property within the HTTP context and call the `get` method (only if you don't want to share breadcrumbs globally from the middleware or Inertia config).
 
 ```typescript
 import { HttpContext } from '@adonisjs/core/http'

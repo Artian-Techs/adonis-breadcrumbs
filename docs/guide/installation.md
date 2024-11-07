@@ -36,6 +36,20 @@ node ace add @artian-techs/adonis-breadcrumbs
 Once the middleware is registered:
 
 - Edge views will have access to the same breadcrumbs instance as in the HTTP context.
-- Inertia views will only have access to the array of the breadcrumbs of the current route. This is because we can't pass an instance to Inertia, as everything is serialized.
 
+:::
+
+If you are using Inertia, you will have to configure it to share the breadcrumbs with all of your routes.
+
+Just open `config/inertia.ts` and add a new shared property.
+
+```ts
+  sharedData: {
+    // ... other shared properties
+    breadcrumbs: (ctx) => ctx.breadcrumbs.get(),
+  },
+```
+
+::: warning
+You must use the `get` method to serialize breadcrumb items, since `ctx.breadcrumbs` is an instance. We do not share the breadcrumb items with Inertia from the middleware because items might be added manually (e.g from a controller method using `ctx.breadcrumbs.add()` method), and because `get` method must be called everytime after `add` method which could be redundant.
 :::

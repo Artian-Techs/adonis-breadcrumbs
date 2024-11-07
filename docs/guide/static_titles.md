@@ -21,7 +21,7 @@ When a route has one parent or more, bear in mind that the HTTP context of the c
 
 ## Get breadcrumbs
 
-To generate breadcrumbs for the current route, you must access the `breadcrumbs` property within the HTTP context and call the `get` method.
+To generate breadcrumbs for the current route, you must access the `breadcrumbs` property within the HTTP context and call the `get` method (only if you don't want to share breadcrumbs globally from the middleware or Inertia config).
 
 ```typescript{5}
 import { HttpContext } from '@adonisjs/core/http'
