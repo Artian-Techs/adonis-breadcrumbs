@@ -28,14 +28,14 @@ router
   })
 ```
 
-#### Using a callback
+#### Using `add` method
 
 If you need more control, you can use `add` method from a controller.
 
 ```ts
 import type { HttpContext } from '@adonisjs/core/http'
 
-export default class HomeController {
+export default class SomeController {
   async show({ request, breadcrumbs }: HttpContext) {
     breadcrumbs.add('Foo', request.url())
   }
