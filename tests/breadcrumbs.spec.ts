@@ -12,6 +12,25 @@ import { setupApp } from '../test_helpers/index.js'
 import BreadcrumbsMiddleware from '../src/breadcrumbs_middleware.js'
 
 test.group('Breadcrumbs', () => {
+  test('add method should add a breadcrum item to the trail', async ({ assert }) => {
+    const router = new RouterFactory().create()
+    const route = router.get('/', async () => {})
+    router.commit()
+
+    const registry = new BreadcrumbsRegistry({}, router)
+    registry.register(route, 'Foo')
+    registry.computePatterns()
+
+    const ctx = new HttpContextFactory().create()
+    ctx.request = new RequestFactory().merge({ url: '/', method: 'GET' }).create()
+    ctx.route = router.match(ctx.request.url(), ctx.request.method())!.route
+
+    const breadcrumbs = new Breadcrumbs(router, registry, ctx)
+    breadcrumbs.add('Test', '/test')
+
+    assert.equal(breadcrumbs.get().length, 2)
+  })
+
   test('get method should return an array', async ({ assert }) => {
     const router = new RouterFactory().create()
     const route = router.get('/', async () => {})

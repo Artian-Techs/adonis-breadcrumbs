@@ -47,6 +47,8 @@ export class Breadcrumbs {
    */
   #url: string
 
+  #breadcrumbItemsToAdd: BreadcrumbItem[] = []
+
   constructor(router: HttpRouterService, registry: BreadcrumbsRegistry, ctx: HttpContext) {
     this.#router = router
     this.#registry = registry
@@ -59,8 +61,12 @@ export class Breadcrumbs {
     this.#trail = new BreadcrumbsTrail(this.#registry, this.#router, this.#ctx, this.#resources)
   }
 
+  add(title: string, url: string, name?: string) {
+    this.#breadcrumbItemsToAdd.push({ title, url, name })
+  }
+
   get(routeName?: string) {
-    if (this.#trail.items.length > 0) {
+    if (this.#trail.items.length > 0 && this.#registry.temporaryRoutes.length === 0) {
       return this.#trail.items
     }
 
@@ -157,6 +163,10 @@ export class Breadcrumbs {
           this.#router.findOrFail(fragment, domain).name
         )
       }
+    }
+
+    for (const item of this.#breadcrumbItemsToAdd) {
+      this.#trail.push(item.title, item.url, item.name)
     }
   }
 
