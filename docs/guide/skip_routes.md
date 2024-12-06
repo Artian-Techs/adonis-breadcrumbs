@@ -1,8 +1,10 @@
-# Skip routes
+# Skip routes from Breadcrumbs
 
-If a route has a name, it can be skipped when generating breadcrumbs.
+The `skip()` method allows you to exclude specific routes from the breadcrumbs when they have a defined name. This method returns an array of breadcrumb items without the skipped routes and does not work for breadcrumbs generated automatically (i.e, when using the BreadcrumbsMiddleware or passing the Breadcrumbs to Inertia). If you don't want to fully control the Breadcrumbs, use the `remove()` method.
 
-## Skip one route
+This method accepts either a single name or an array of names as its argument.
+
+## Skipping a single route
 
 ```typescript
 import router from '@adonisjs/core/services/router'
@@ -37,7 +39,7 @@ export default class UsersController {
 }
 ```
 
-In this example, the `https://your-site.com/admin/dashboard/users` URL should return an ordered array containing the breadcrumbs of the `/admin/dashboard/users` route without the route named `admin.dashboard`.
+When visiting the URL `https://your-site.com/admin/dashboard/users`, the breadcrumbs generated will exclude the route named `admin.dashboard`. The resulting breadcrumbs array would look like this:
 
 ```json
 [
@@ -48,9 +50,7 @@ In this example, the `https://your-site.com/admin/dashboard/users` URL should re
 
 ## Skip multiple routes
 
-The `skip` method accepts a string or an array of strings.
-
-If we take the same example as before and pass an array of route names as argument to the `skip` method, it will skip them when generating the breadcrumbs.
+To remove multiple routes simultaneously, you can pass an array of route names to the `skip()` method.
 
 ```typescript
 import { HttpContext } from '@adonisjs/core/http'
@@ -62,7 +62,7 @@ export default class UsersController {
 }
 ```
 
-In this example, the `https://your-site.com/admin/dashboard/users` URL should return an ordered array containing the breadcrumbs of the `/admin/dashboard/users` route without the routes `home` and `admin.dashboard`.
+When visiting the URL `https://your-site.com/admin/dashboard/users`, the breadcrumbs generated will exclude the routes named home and `admin.dashboard`. The resulting breadcrumbs array would look like this:
 
 ```json
 [{ "url": "/admin/dashboard/users", "title": "Dashboard - Users", "name": "admin.dashboard.users" }]
