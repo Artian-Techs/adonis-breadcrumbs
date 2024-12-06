@@ -1,4 +1,4 @@
-# Removing Routes from Breadcrumbs
+# Removing routes from Breadcrumbs
 
 The `remove()` method allows you to exclude specific routes from the breadcrumbs when they have a defined name. This is particularly useful when generating breadcrumbs automatically, as it enables precise filtering of breadcrumb items. Unlike the `skip()` method, which excludes routes and returns a new array of breadcrumb items, the `remove()` method does not return anything.
 

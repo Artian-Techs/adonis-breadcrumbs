@@ -1,4 +1,4 @@
-# Skip routes from Breadcrumbs
+# Skipping routes
 
 The `skip()` method allows you to exclude specific routes from the breadcrumbs when they have a defined name. This method returns an array of breadcrumb items without the skipped routes and does not work for breadcrumbs generated automatically (i.e, when using the BreadcrumbsMiddleware or passing the Breadcrumbs to Inertia). If you don't want to fully control the Breadcrumbs, use the `remove()` method.
 
