@@ -31,6 +31,27 @@ test.group('Breadcrumbs', () => {
     assert.equal(breadcrumbs.get().length, 2)
   })
 
+  test('remove method should remove a breadcrum item from the trail', async ({ assert }) => {
+    const router = new RouterFactory().create()
+    const route = router.get('/', async () => {}).as('test.foo')
+    const route2 = router.get('/bar', async () => {}).as('test.bar')
+    router.commit()
+
+    const registry = new BreadcrumbsRegistry({}, router)
+    registry.register(route, 'Foo')
+    registry.register(route2, 'Bar')
+    registry.computePatterns()
+
+    const ctx = new HttpContextFactory().create()
+    ctx.request = new RequestFactory().merge({ url: '/bar', method: 'GET' }).create()
+    ctx.route = router.match(ctx.request.url(), ctx.request.method())!.route
+
+    const breadcrumbs = new Breadcrumbs(router, registry, ctx)
+    breadcrumbs.remove('test.foo')
+
+    assert.equal(breadcrumbs.get().length, 1)
+  })
+
   test('get method should return an array', async ({ assert }) => {
     const router = new RouterFactory().create()
     const route = router.get('/', async () => {})

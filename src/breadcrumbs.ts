@@ -49,6 +49,8 @@ export class Breadcrumbs {
 
   #breadcrumbItemsToAdd: BreadcrumbItem[] = []
 
+  #breadcrumbItemsToRemove: string[] = []
+
   constructor(router: HttpRouterService, registry: BreadcrumbsRegistry, ctx: HttpContext) {
     this.#router = router
     this.#registry = registry
@@ -63,6 +65,10 @@ export class Breadcrumbs {
 
   add(title: string, url: string, name?: string) {
     this.#breadcrumbItemsToAdd.push({ title, url, name })
+  }
+
+  remove(routeNames: string | string[]): void {
+    this.#breadcrumbItemsToRemove.push(...(Array.isArray(routeNames) ? routeNames : [routeNames]))
   }
 
   get(routeName?: string) {
@@ -157,11 +163,13 @@ export class Breadcrumbs {
       const { title, domain } = this.#registry.getRouteDataByPattern(fragment)
 
       if (title) {
-        this.#trail.push(
-          this.#resolveTitle(title),
-          urlFragments[i],
-          this.#router.findOrFail(fragment, domain).name
-        )
+        const name = this.#router.findOrFail(fragment, domain).name
+
+        if (name && this.#breadcrumbItemsToRemove.includes(name)) {
+          continue
+        }
+
+        this.#trail.push(this.#resolveTitle(title), urlFragments[i], name)
       }
     }
 
